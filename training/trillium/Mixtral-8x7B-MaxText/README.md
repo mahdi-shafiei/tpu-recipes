@@ -27,7 +27,7 @@ python3 benchmarks/benchmark_runner.py --project=${PROJECT} --zone={zone} --devi
 
 From your workload logs, you should start seeing step time logs like the following:
 ```
-completed step: 19, seconds: 8.982, TFLOP/s/device: 302.566, Tokens/s/device: 3648.273, total_weights: 8388608, loss: 0.030
+completed step: 19, seconds: 8.409, TFLOP/s/device: 323.173, Tokens/s/device: 3896.752, total_weights: 8388608, loss: 0.031
 ```
 
 Int8 run:
