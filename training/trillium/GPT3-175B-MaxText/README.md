@@ -8,16 +8,23 @@ Please follow this [link](https://github.com/AI-Hypercomputer/tpu-recipes/traini
 
 ## Run Maxtext GPT3-175B workloads on GKE
 
+### Test Env
+jaxlib=0.4. 35
+
+libtpu-nighly=20241028
+
+[maxtext](https://github.com/AI-Hypercomputer/maxtext.git)@2e1ebad7c660e45d2f020ef025d74cc90e2f0eb3
+
 ### Starting workload
 
 From the MaxText root directory, start your GPT3-175B workload
 
 ```
 python3 benchmarks/benchmark_runner.py --project=${PROJECT} --zone={zone} --device_type=v6e-256 --num_slices=1  --cluster_name=${CLUSTER_NAME} --base_output_directory=${OUTPUT_DIR} \
---model_name="gpt_3_175b" --libtpu_version=20241009 --base_docker_image=maxtext_base_image
+--model_name="gpt_3_175b" --libtpu_version=20241028 --base_docker_image=maxtext_base_image
 ```
 
 From your workload logs, you should start seeing step time logs like the following:
 ```
-completed step: 19, seconds: 14.479, TFLOP/s/device: 456.759, Tokens/s/device: 424.349, total_weights: 1572864, loss: 0.000
+step: 100, seconds: 14.245, TFLOP/s/device: 464.261, Tokens/s/device: 431.318, total_weights: 1572864, loss: 0.000
 ```

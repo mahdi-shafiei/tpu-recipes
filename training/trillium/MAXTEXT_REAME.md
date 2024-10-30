@@ -7,7 +7,7 @@ cd maxtext
 
 2. Run the following commands to build the docker image
 ```
-bash docker_build_dependency_image.sh MODE=nightly DEVICE=tpu
+bash docker_build_dependency_image.sh DEVICE=tpu MODE=stable_stack BASEIMAGE=us-docker.pkg.dev/cloud-tpu-images/jax-stable-stack/tpu:jax0.4.35-rev1
 ```
 
 3. Upload your docker image to Container Registry
