@@ -11,7 +11,7 @@ Please follow this [link](https://github.com/AI-Hypercomputer/tpu-recipes/traini
 ### Test Env
 jaxlib=0.4. 35
 
-libtpu-nighly=20241028
+libtpu-nightly=20241028
 
 [maxtext](https://github.com/AI-Hypercomputer/maxtext.git)@2e1ebad7c660e45d2f020ef025d74cc90e2f0eb3
 
