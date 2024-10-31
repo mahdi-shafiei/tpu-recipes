@@ -9,7 +9,7 @@ Please follow this [link](https://github.com/AI-Hypercomputer/tpu-recipes/traini
 ## Run Maxtext LLAMA2-70B workloads on GKE
 
 ### Test Env
-jaxlib=0.4. 35
+jaxlib=0.4.35
 
 libtpu-nightly=20241028
 
