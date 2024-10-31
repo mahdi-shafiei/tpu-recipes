@@ -1,4 +1,4 @@
-# Prep for Maxtext GPT3-175B workloads on GKE
+# Prep for Maxtext workloads on GKE
 1. Clone [Maxtext](https://github.com/google/maxtext) repo and move to its directory
 ```
 git clone https://github.com/google/maxtext.git
