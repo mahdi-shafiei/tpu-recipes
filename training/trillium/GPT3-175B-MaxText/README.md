@@ -13,7 +13,7 @@ jaxlib=0.4. 35
 
 libtpu-nightly=20241028
 
-[maxtext](https://github.com/AI-Hypercomputer/maxtext.git)@2e1ebad7c660e45d2f020ef025d74cc90e2f0eb3
+[maxtext](https://github.com/AI-Hypercomputer/maxtext.git)@e7292a3a572792a0d797fc8977b21d0f255729f1
 
 ### Starting workload
 

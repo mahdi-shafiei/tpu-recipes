@@ -3,6 +3,7 @@
 ```
 git clone https://github.com/google/maxtext.git
 cd maxtext
+git checkout ${MAXTEXT_HASH}
 ```
 
 2. Run the following commands to build the docker image
