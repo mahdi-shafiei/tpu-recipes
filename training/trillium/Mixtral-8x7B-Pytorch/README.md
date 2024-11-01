@@ -42,7 +42,7 @@ HF_TOKEN=hf_***
 3. Edit `host.sh` to add the docker image URL if default docker image is not accessible to you.
 ```bash
 # docker image URL to use for the training
-DOCKER_IMAGE=
+DOCKER_IMAGE=us-central1-docker.pkg.dev/deeplearning-images/reproducibility/pytorch-tpu-mixtral:v0
 ```
 4. Run the training script:
 ```bash
@@ -50,15 +50,13 @@ DOCKER_IMAGE=
 ```
 `benchmark.sh` script will upload 1) environment parameters in `env.sh`, 2) model related config in `config.json`, `fsdp_config.json`, 3) docker launch script in `host.sh` and 4) python training command in `train.sh` into all TPU workers, and starts the training afterwards. When all training steps complete, it will print out training metrics of each worker as below in terminal:
 ```
-{'train_runtime': 3600.399, 'train_samples_per_second': 28.441, 'train_steps_per_second': 0.028, 'train_loss': 7.33026611328125, 'epoch': 3.12}
 ***** train metrics *****
-epoch = 3.125
-total_flos = 109152470400GF
-train_loss = 7.3303
-train_runtime = 1:00:00.39
-train_samples = 32816
-train_samples_per_second = 28.441
-train_steps_per_second = 0.028
-
+[worker :3] ***** train metrics *****
+[worker :3]   epoch                    =      0.0391
+[worker :3]   total_flos               = 216428520GF
+[worker :3]   train_loss               =       8.443
+[worker :3]   train_runtime            =  0:04:23.15
+[worker :3]   train_samples            =       32816
+[worker :3]   train_samples_per_second =       4.864
 ```
 In addition,  it will copy back the trained model under `output/*`.
