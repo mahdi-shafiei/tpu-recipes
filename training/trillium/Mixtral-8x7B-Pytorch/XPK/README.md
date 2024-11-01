@@ -19,12 +19,17 @@ cd xpk
 pip install .
 popd
 ```
-
 ---
-### 3. [Optional, skip if using existing XPK cluster] Create the XPK clusters
-Please follow the corresponding XPK user guide to crea the XPK cluster first. If the cluster is already created, skip to Step 4.  
+### 3. Update and export environment variables
+Modify environment variables in `env.sh` targetting your gcloud resource and the experiment model config. Source the script for future use.
 ```bash
 source env.sh
+```
+
+---
+### 4. [Optional, skip if using existing XPK cluster] Create the XPK clusters
+Please follow the corresponding XPK user guide to crea the XPK cluster first. If the cluster is already created, skip to Step 4.  
+```bash
 
 NETWORK_NAME=${CLUSTER_NAME}-mtu9k
 NETWORK_FW_NAME=${NETWORK_NAME}-fw
@@ -39,7 +44,7 @@ python3 xpk.py cluster create --cluster $CLUSTER_NAME --cluster-cpu-machine-type
 Note thatt if the `gke-version` is not available anymore, pick one available from the error message from the terminal output.
 
 ---
-### 4. Launch the training workload to XPK cluster.
+### 5. Launch the training workload to XPK cluster.
 ```
 bash benchmark.sh
 ```
@@ -76,7 +81,7 @@ EXIT_CODE=0
 XPK End: Thu Oct 31 02:03:01 UTC 2024
 ```
 ---
-### 5. [Optional] Metric processing
+### 6. [Optional] Metric processing
 You can use the profile 
 ```
 # download the profile from gcp bucket to local
