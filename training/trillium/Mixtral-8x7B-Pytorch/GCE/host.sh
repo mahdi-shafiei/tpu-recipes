@@ -7,7 +7,7 @@ worker_id=$(curl -s "http://metadata.google.internal/computeMetadata/v1/instance
 cat >> /dev/null <<EOF
 EOF
 
-stdbuf -oL bash <<-PIPE_EOF 2>&1 | sed "s/^/[worker $slice_id:$worker_id] /g" | tee runlog
+stdbuf -oL bash <<-PIPE_EOF 2>&1 | sed "s/^/[worker $worker_id] /g" | tee runlog
   set -o xtrace
   # Configure docker
   sudo groupadd docker

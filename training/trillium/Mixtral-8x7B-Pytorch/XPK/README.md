@@ -24,6 +24,8 @@ popd
 ### 3. [Optional, skip if using existing XPK cluster] Create the XPK clusters
 Please follow the corresponding XPK user guide to crea the XPK cluster first. If the cluster is already created, skip to Step 4.  
 ```bash
+source env.sh
+
 NETWORK_NAME=${CLUSTER_NAME}-mtu9k
 NETWORK_FW_NAME=${NETWORK_NAME}-fw
 
@@ -34,7 +36,7 @@ export CLUSTER_ARGUMENTS="--network=${NETWORK_NAME} --subnetwork=${NETWORK_NAME}
 
 python3 xpk.py cluster create --cluster $CLUSTER_NAME --cluster-cpu-machine-type=n1-standard-8 --num-slices=$NUM_SLICES --tpu-type=$TPU_TYPE --zone=$ZONE  --project=$PROJECT --on-demand --custom-cluster-arguments="${CLUSTER_ARGUMENTS}"  --create-vertex-tensorboard --gke-version=1.31.1-gke.1678000
 ```
-Note thst if the `gke-version` is not available anymore, pick one available from the error message from the terminal output.
+Note thatt if the `gke-version` is not available anymore, pick one available from the error message from the terminal output.
 
 ---
 ### 4. Launch the training workload to XPK cluster.
@@ -82,7 +84,7 @@ gsutil cp -r $PROFILE_LOG_DIR ./
 
 
 # feed in the xplane.pd file, e.g.,
-python profile_convert.py ${PROFILE_LOG_DIR}/plugins/profile/2024_10_31_02_00_47/127.0.0.1_9012.xplane.pb
+python utils/profile_convert.py ${PROFILE_LOG_DIR}/plugins/profile/2024_10_31_02_00_47/127.0.0.1_9012.xplane.pb
 ```
 
 You will see output like that tells the average step time in second:
