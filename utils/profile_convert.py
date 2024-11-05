@@ -1,7 +1,7 @@
 import sys
 import statistics
+import xplane_pb2
 
-from . import xplane_pb2
 
 
 def analyze_step_duration(file_path: str) -> float:
@@ -46,3 +46,16 @@ def analyze_step_duration(file_path: str) -> float:
     return sum(durations) / len(durations)
 
   return statistics.median(durations)
+
+if __name__ == "__main__":
+  if len(sys.argv) != 2:
+    print(f"Usage: {sys.argv[0]} <path_to_proto_file>")
+    sys.exit(1)
+  proto_file_path = sys.argv[1]
+  try:
+    # Average SyncTensorsGraph duration.
+    average_duration = analyze_step_duration(proto_file_path)
+    print(f"{average_duration:.4f}")
+  except Exception as e:
+    print(f"Error: {e}")
+    sys.exit(1)
