@@ -70,44 +70,50 @@ mistralai/Mixtral-8x7B-v0.1
 mistralai/Mixtral-8x7B-Instruct-v0.1
 ```
 
+Note: Before you run the following command for the first time, make sure you
+authenticate with HuggingFace. 
+
 To run jetstream-pytorch server with one model:
 ```bash
 jpt serve --model_id meta-llama/Llama-2-7b-chat-hf
 ```
-If it's the first time you run this model, it will download weights from 
+
+The first time you run this model, the `jpt serve` command will attempt
+to download weights from HuggingFace which requires that you authenticate with
 HuggingFace. 
 
-HuggingFace's Llama3 weights are gated, so you need to either run 
-`huggingface-cli login` to set your token, OR, pass your hf_token explicitly.
+To authenticate, run `huggingface-cli login` to set your access token, or pass 
+your HuggingFace access token to the `jpt serve` command using the `--hf_token` 
+flag:
 
-To pass hf token explicitly, add `--hf_token` flag
 ```bash
 jpt serve --model_id meta-llama/Llama-2-7b-chat-hf --hf_token=...
 ```
 
-To login using huggingface hub, run:
+For more information about HuggingFace access tokens, see [Access Tokens](https://huggingface.co/docs/hub/en/security-tokens). 
+
+To log in using [HuggingFace Hub](https://huggingface.co/docs/hub/en/index), 
+run the following command and follow the prompts:
 
 ```bash
 pip install -U "huggingface_hub[cli]"
 huggingface-cli login
 ```
-Then follow its prompt.
 
-After the weights are downloaded,
-Next time when you run this `--hf_token` will no longer be required.
+After the weights are downloaded, you no longer need to specify the `--hf_token`
+flag.
 
-To run this model in `int8` quantization, add `--quantize_weights=1`.
+To run this model with `int8` quantization, add `--quantize_weights=1`.
 Quantization will be done on the flight as the weight loads.
 
-Weights downloaded from HuggingFace will be stored by default in `checkpoints` folder.
-in the place where `jpt` is executed.
+Weights downloaded from HuggingFace are stored by default in a directory called
+`checkpoints` folder in the directory where you run `jpt`. You can change also
+specify a directory using the `--working_dir` flag.
 
-You can change where the weights are stored with `--working_dir` flag.
-
-If you wish to use your own checkpoint, then, place them inside 
-of the `checkpoints/<org>/<model>/hf_original` dir (or the corresponding subdir in `--working_dir`). For example,
-Llama2-7b checkpoints will be at `checkpoints/meta-llama/Llama-2-7b-hf/hf_original/*.safetensors`. You can replace these files with modified
-weights in HuggingFace format. 
+If you wish to use your own checkpoint, place them inside the 
+`checkpoints/<org>/<model>/hf_original` dir (or the corresponding subdir in 
+`--working_dir`). For example, Llama2-7b checkpoints will be in `checkpoints/meta-llama/Llama-2-7b-hf/hf_original/*.safetensors`. You can replace these files with modified weights in 
+HuggingFace format. 
 
 # Benchmark
 
