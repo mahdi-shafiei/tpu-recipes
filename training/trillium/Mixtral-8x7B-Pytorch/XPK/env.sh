@@ -12,6 +12,6 @@ export BATCH_PER_DEVICE=4
 export SEQUENCE_LENGTH=4096
 export MAX_STEP=50
 export WORKLOAD_NAME=${USER}-xpk-${TPU_TYPE}-... # Your workload name. Need to update for different run.
-export BASE_DOCKER_IMAGE=us-central1-docker.pkg.dev/deeplearning-images/reproducibility/pytorch-tpu-mixtral:v1
+export BASE_DOCKER_IMAGE=us-central1-docker.pkg.dev/deeplearning-images/reproducibility/pytorch-tpu-mixtral:multipod
 export PROFILE_LOG_DIR=... # GCS bucket to store profile in form of gs://...
 export HF_TOKEN=... # Add your own Hugging face token to download model

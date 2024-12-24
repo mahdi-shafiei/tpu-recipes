@@ -37,4 +37,4 @@ python3 /workspace/transformers/examples/pytorch/language-modeling/run_clm.py \
 --block_size=${SEQUENCE_LENGTH} --optim=adafactor --save_strategy=no \
 --logging_strategy=no --fsdp="full_shard" \
 --fsdp_config=/app/fsdp_config.json --torch_dtype=bfloat16 \
---dataloader_drop_last=yes --max_steps=${MAX_STEP} --gmm --flash_attention
+--dataloader_drop_last=yes --max_steps=${MAX_STEP} --flash_attention --static

@@ -35,4 +35,4 @@ python3 examples/pytorch/language-modeling/run_clm.py \
   --flash_attention \
   --num_train_epochs 1 \
   --max_steps "$MAX_STEPS" \
-  --gmm
+  --static
