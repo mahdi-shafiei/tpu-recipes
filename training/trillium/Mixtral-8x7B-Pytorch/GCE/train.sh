@@ -13,7 +13,7 @@ unset LD_PRELOAD
 
 cd transformers/
 
-
+# The flag --static uses the dropping implementation for MoE
 python3 examples/pytorch/language-modeling/run_clm.py \
   --dataset_name wikitext \
   --dataset_config_name wikitext-103-raw-v1 \
