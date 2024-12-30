@@ -37,8 +37,8 @@ created).
 1. git clone and navigate to this README repo and run training script:
 
 ```bash
-git clone --depth 1 https://github.com/gclouduniverse/reproducibility.git
-cd reproducibility/Training/TPU-Trillium/Llama3-70B-PyTorch
+git clone --depth 1 https://github.com/AI-Hypercomputer/tpu-recipes.git
+cd training/trillium/GCE/Llama3-70B-PyTorch
 ```
 
 2. Edit `env.sh` to add the hugging face token and/or setup the training parameters.
