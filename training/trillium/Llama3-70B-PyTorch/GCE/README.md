@@ -34,6 +34,8 @@ and comes with all the package dependency needed to run the model training.
 All the command below should run from your own machine (not the TPU host you
 created).
 
+Note: if want to get metraic printed on all workers, please try `us-central1-docker.pkg.dev/deeplearning-images/reproducibility/pytorch-xla/llama3-70b:manfeijan15newbuilt` by modify [this line]()
+
 1. git clone and navigate to this README repo and run training script:
 
 ```bash
