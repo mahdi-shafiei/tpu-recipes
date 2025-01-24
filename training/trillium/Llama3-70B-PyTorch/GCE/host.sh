@@ -1,6 +1,7 @@
 #!/bin/bash
 
 DOCKER_IMAGE=us-central1-docker.pkg.dev/deeplearning-images/reproducibility/pytorch-xla/llama3-70b:nightly-sep28
+# DOCKER_IMAGE=us-central1-docker.pkg.dev/deeplearning-images/reproducibility/pytorch-xla/llama3-70b:manfeijan15newbuilt # Docker image support print train metric for each worker
 
 worker_id=$(curl -s "http://metadata.google.internal/computeMetadata/v1/instance/attributes/agent-worker-number" -H 'Metadata-Flavor: Google')
 
