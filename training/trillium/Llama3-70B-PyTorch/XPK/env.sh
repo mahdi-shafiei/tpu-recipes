@@ -8,7 +8,7 @@ export NUM_SLICE=1
 export CLUSTER_NAME=xpk-$USER-... # use existing CLUSTER if you have
 
 # Environment variables associated with training config.
-export BATCH_PER_DEVICE=1
+export BATCH_PER_DEVICE=2
 export SEQUENCE_LENGTH=4096
 export MAX_STEP=50
 export WORKLOAD_NAME=${USER}-xpk-${TPU_TYPE}-... # Your workload name. Need to update for different run.
