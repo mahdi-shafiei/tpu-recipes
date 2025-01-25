@@ -49,7 +49,7 @@ Note thst if the `gke-version` is not available anymore, pick one available from
 bash benchmark.sh
 ```
 
-Below is part of the sample output from 
+Below is part of the sample output:  
 ```
 ...
 [XPK] Waiting for `Upload Docker Image`, for 7 seconds
