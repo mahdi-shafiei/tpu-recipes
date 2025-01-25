@@ -1,9 +1,9 @@
-# Instructions for training Llama 3 405B on Trillium TPU
+# Instructions for training Llama 3.1 405B on Trillium TPU (1 pod)
 
 This user guide provides a concise overview of the essential steps required to
-run Hugging Face (HF) Llama 3 405B training on Trillium TPUs.
-
-Note: the current docker supports Single Pod v6e. The multipod solution will be available in an upcoming update soon.
+run Hugging Face (HF) Llama 3.1 405B training on Trillium TPUs. Specifically,
+the instructions and docker image referenced here is optimized for a single
+Trillium pod.
 
 ## Environment Setup
 
