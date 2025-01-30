@@ -28,13 +28,11 @@ gcloud alpha compute tpus tpu-vm create $TPU_NAME \
 
 The following setup runs the training job with Llama 3 70B on GCE TPUs using
 the docker image from this registry
-(`us-central1-docker.pkg.dev/deeplearning-images/reproducibility/pytorch-xla/llama3-70b:nightly-sep28`).
+(`us-central1-docker.pkg.dev/deeplearning-images/reproducibility/pytorch-xla/llama3-70b:jan15built`).
 The docker image uses torch and torch_xla nightly build from 09/28/2024
 and comes with all the package dependency needed to run the model training.
 All the command below should run from your own machine (not the TPU host you
 created).
-
-Note: if want to get metric printed on all workers, please try `us-central1-docker.pkg.dev/deeplearning-images/reproducibility/pytorch-xla/llama3-70b:jan15built` by modifying [this line](https://github.com/AI-Hypercomputer/tpu-recipes/blob/af4393a42966a9a1f76b9f270a2e07788e2879ff/training/trillium/Llama3-70B-PyTorch/GCE/host.sh#L3)
 
 1. git clone and navigate to this README repo and run training script:
 
@@ -74,3 +72,6 @@ it will print out training metrics of each worker as below in terminal:
 ```
 
 In addition,  it will copy back the trained model under `output/*`.
+
+### Appendix:
+- historical docker image releases: `us-central1-docker.pkg.dev/deeplearning-images/reproducibility/pytorch-xla/llama3-70b:nightly-sep28`
