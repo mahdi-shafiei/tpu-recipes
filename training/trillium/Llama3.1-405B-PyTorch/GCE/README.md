@@ -26,9 +26,9 @@ gcloud alpha compute tpus tpu-vm create $TPU_NAME \
     --project $PROJECT --zone $ZONE --version v2-alpha-tpuv6e
 ```
 
-## Steps to Run HF Llama 3 405B
+## Steps to Run HF Llama 3.1 405B
 
-The following setup runs the training job with Llama 3 405B on GCE TPUs using
+The following setup runs the training job with Llama 3.1 405B on GCE TPUs using
 the docker image from this registry
 (`us-central1-docker.pkg.dev/deeplearning-images/reproducibility/pytorch-xla/llama3-405b:nightly-sep28`).
 The docker image uses torch and torch_xla nightly build from 09/28/2024
@@ -40,7 +40,7 @@ created).
 
 ```bash
 git clone --depth 1 https://github.com/AI-Hypercomputer/tpu-recipes.git
-cd training/trillium/Llama3-405B-PyTorch
+cd training/trillium/Llama3.1-405B-PyTorch
 ```
 
 2. Edit `env.sh` to add the hugging face token and/or setup the training parameters.
