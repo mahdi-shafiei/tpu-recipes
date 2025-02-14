@@ -29,16 +29,16 @@ gcloud alpha compute tpus tpu-vm create $TPU_NAME \
 The following setup runs the training job with Llama 3 8B on GCE TPUs using
 the docker image from this registry
 (`us-central1-docker.pkg.dev/deeplearning-images/reproducibility/pytorch-tpu-llama:v1`).
-The docker image uses torch and torch_xla nightly build from 01/16/2025
+The docker image uses torch and torch_xla nightly build from 02/11/2025
 and comes with all the package dependency needed to run the model training.
 All the command below should run from your own machine (not the TPU host you
-created).
+created). The Dockerfile is at https://github.com/pytorch-tpu/transformers/blob/flash_attention/Dockerfile
 
 1. git clone and navigate to this README repo and run training script:
 
 ```bash
 git clone --depth 1 https://github.com/AI-Hypercomputer/tpu-recipes.git
-cd training/trillium/GCE/Llama3-8B-PyTorch
+cd training/trillium/Llama3-8B-PyTorch/GCE
 ```
 
 2. Edit `env.sh` to add the hugging face token and/or setup the training parameters.
