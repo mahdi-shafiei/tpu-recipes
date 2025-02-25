@@ -1,6 +1,6 @@
 
 
-# Instructions for training Llama 3 70B on Trillium TPU on multipod using XPK
+# Instructions for training Llama 3.0 8B on Trillium TPU on multipod using XPK
 
 ## Environment Steup
 ---
@@ -44,25 +44,24 @@ python3 xpk.py cluster create --cluster $CLUSTER_NAME --cluster-cpu-machine-type
 Note thst if the `gke-version` is not available anymore, pick one available from the error message from the terminal output.
 
 ---
-### 5. Launch the Llama 3 training workload to XPK cluster.
+### 5. Launch the Llama 3.0 training workload to XPK cluster.
 ```
 bash benchmark.sh
 ```
 
-Below is part of the sample output:  
+Below is part of the sample output from 
 ```
 ...
 [XPK] Waiting for `Upload Docker Image`, for 7 seconds
-sqpu-2024-11-01-01-15-40: digest: sha256:3fe8b828bc6f96b1c74220d90273147ee188601781330d3592bbffc4fa0897af size: 4951
 [XPK] Task: `Upload Docker Image` terminated with code `0`
 [XPK] Task: `Creating Workload` is implemented by `kubectl apply -f /tmp/tmpc65ikqh3`, streaming output live.
 [XPK] Waiting for `Creating Workload`, for 0 seconds
-jobset.jobset.x-k8s.io/piz-xpk-v6e-256 created
+jobset.jobset.x-k8s.io/<workload> created
 [XPK] Task: `Creating Workload` terminated with code `0`
-[XPK] Task: `GKE Dashboard List` is implemented by `gcloud monitoring dashboards list --project=tpu-prod-env-automated --filter="displayName:'GKE - TPU Monitoring Dashboard'" --format="value(name)" --verbosity=error`, hiding output unless there is an error.
-[XPK] No dashboard with displayName:'GKE - TPU Monitoring Dashboard' found in the project:tpu-prod-env-automated.
+[XPK] Task: `GKE Dashboard List` is implemented by `gcloud monitoring dashboards list --project=<project> --filter="displayName:'GKE - TPU Monitoring Dashboard'" --format="value(name)" --verbosity=error`, hiding output unless there is an error.
+[XPK] No dashboard with displayName:'GKE - TPU Monitoring Dashboard' found in the project:<project>.
 [XPK] Follow https://github.com/google/cloud-tpu-monitoring-debugging to deploy monitoring dashboard to view statistics and outlier mode of GKE metrics.
-[XPK] Follow your workload here: https://console.cloud.google.com/kubernetes/service/us-east5/bodaborg-v6e-256/default/piz-xpk-v6e-256/details?project=tpu-prod-env-automated
+[XPK] Follow your workload here: https://console.cloud.google.com/kubernetes/service/us-east5/<cluster_name>
 [XPK] Exiting XPK cleanly
 ```
 This will point you to a workload link `https://console.cloud.google.com/kubernetes/service/...`. Follow the workload link and check the log. If the training works correctly, we shall see below info from the log explorer:
