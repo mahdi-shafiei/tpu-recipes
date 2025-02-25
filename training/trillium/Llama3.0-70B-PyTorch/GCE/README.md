@@ -1,7 +1,7 @@
-# Instructions for training Llama 3 70B on Trillium TPU
+# Instructions for training Llama 3.0 70B on Trillium TPU
 
 This user guide provides a concise overview of the essential steps required to
-run Hugging Face (HF) Llama 3 70B training on Trillium TPUs.
+run Hugging Face (HF) Llama 3.0 70B training on Trillium TPUs.
 
 ## Environment Setup
 
@@ -24,9 +24,9 @@ gcloud alpha compute tpus tpu-vm create $TPU_NAME \
     --project $PROJECT --zone $ZONE --version v2-alpha-tpuv6e
 ```
 
-## Steps to Run HF Llama 3 70B
+## Steps to Run HF Llama 3.0 70B
 
-The following setup runs the training job with Llama 3 70B on GCE TPUs using
+The following setup runs the training job with Llama 3.0 70B on GCE TPUs using
 the docker image from this registry
 (`us-central1-docker.pkg.dev/deeplearning-images/reproducibility/pytorch-xla/llama3-70b:jan15built`).
 The docker image uses torch and torch_xla nightly build from 09/28/2024
@@ -38,7 +38,7 @@ created).
 
 ```bash
 git clone --depth 1 https://github.com/AI-Hypercomputer/tpu-recipes.git
-cd training/trillium/GCE/Llama3-70B-PyTorch
+cd training/trillium/GCE/Llama3.0-70B-PyTorch
 ```
 
 2. Edit `env.sh` to add the hugging face token and/or setup the training parameters.
