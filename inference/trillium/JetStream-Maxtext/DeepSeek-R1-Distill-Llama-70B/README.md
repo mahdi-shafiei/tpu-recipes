@@ -42,13 +42,13 @@ export QUEUED_RESOURCE_ID=${NODE_ID}-${ZONE}
 
 <details>
  <summary>Environment variables descriptions</summary>
-- `PROJECT_ID`: Google Cloud Project Name. Use an existing project or create a new one at
-- `NODE_ID`: The user-assigned ID of the TPU which is created when the queued resource request is allocated.
-- `ZONE`: See the [TPU regions and zones](https://cloud.google.com/tpu/docs/regions-zones) document for the supported zones.
-- `ACCELERATOR_TYPE`: v6e-8
-- `RUNTIME_VERSION`: v2-alpha-tpuv6e
-- `SERVICE_ACCOUNT`: This is the email address for your service account that you can find in Google Cloud Console \-\> IAM \-\> Service Accounts. For example: tpu-service-account@\<your\_project\_ID\>.iam.gserviceaccount.com.com
-- `QUEUED_RESOURCE_ID`: The user-assigned text ID of the queued resource request.
+ <li>`PROJECT_ID`: Google Cloud Project Name. Use an existing project or create a new one at</li>
+ <li>`NODE_ID`: The user-assigned ID of the TPU which is created when the queued resource request is allocated.</li>
+ <li>`ZONE`: See the [TPU regions and zones](https://cloud.google.com/tpu/docs/regions-zones) document for the supported zones.</li>
+ <li>`ACCELERATOR_TYPE`: v6e-8</li>
+ <li>`RUNTIME_VERSION`: v2-alpha-tpuv6e</li>
+ <li>`SERVICE_ACCOUNT`: This is the email address for your service account that you can find in Google Cloud Console \-\> IAM \-\> Service Accounts. For example: tpu-service-account@\<your\_project\_ID\>.iam.gserviceaccount.com.com</li>
+ <li>`QUEUED_RESOURCE_ID`: The user-assigned text ID of the queued resource request.</li>
 </details>
 
 * Create a Hyperdisk Balanced disk of size 500GB
