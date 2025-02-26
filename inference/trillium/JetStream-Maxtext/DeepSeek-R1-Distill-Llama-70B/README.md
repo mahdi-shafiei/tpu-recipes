@@ -4,22 +4,14 @@ This recipe outlines the steps to benchmark the inference of [DeepSeek-R1-Distil
 
 ## Outline
 
-- [Inference benchmark of DeepSeek-R1-Distill-Llama-70B with JetStream MaxText Engine on a v6e (Trillium) TPU VM](#inference-benchmark-of-deepseek-r1-distill-llama-70b-with-jetstream-maxtext-engine-on-a-v6e-trillium-tpu-vm)
-  - [Outline](#outline)
-  - [Step 1: Create a TPU v6e VM](#step-1-create-a-tpu-v6e-vm)
-    - [Environment variables](#environment-variables)
-  - [Step 2: Download JetStream and MaxText GitHub repository](#step-2-download-jetstream-and-maxtext-github-repository)
-  - [Step 3: Setup JetStream and MaxText](#step-3-setup-jetstream-and-maxtext)
-  - [Step 4: Configure environment variables](#step-4-configure-environment-variables)
-  - [Step 5: Convert Hugging Face Checkpoint to MaxText compatible checkpoint](#step-5-convert-hugging-face-checkpoint-to-maxtext-compatible-checkpoint)
-  - [Step 6: Unscan the checkpoint to be used for serving](#step-6-unscan-the-checkpoint-to-be-used-for-serving)
-  - [Step 7: Run MMLU benchmark](#step-7-run-mmlu-benchmark)
-    - [Start MaxText Engine server](#start-maxtext-engine-server)
-    - [Run MMLU benchmarking](#run-mmlu-benchmarking)
-  - [Step 8: Run MATH500 benchmark](#step-8-run-math500-benchmark)
-    - [Start MaxText Engine server](#start-maxtext-engine-server-1)
-    - [Run MATH500 benchmarking](#run-math500-benchmarking)
-  - [Cleanup](#cleanup)
+1. [Provision a TPU v6e VM](#step-1-create-a-tpu-v6e-vm)
+2. [Download JetStream and MaxText GitHub repository](#step-2-download-jetstream-and-maxtext-github-repository)
+3. [Setup JetStream and MaxText](#step-3-setup-jetstream-and-maxtext)
+4. [Configure environment variables](#step-4-configure-environment-variables)
+5. [Convert Hugging Face Checkpoint to MaxText compatible checkpoint](#step-5-convert-hugging-face-checkpoint-to-maxtext-compatible-checkpoint)
+6. [Unscan the checkpoint for efficient serving](#step-6-unscan-the-checkpoint-to-be-used-for-serving)
+7. [Run MMLU benchmark](#step-7-run-mmlu-benchmark)
+8. [Run MATH500 benchmark](#step-8-run-math500-benchmark)
 
 
 ## Step 1: Create a TPU v6e VM
