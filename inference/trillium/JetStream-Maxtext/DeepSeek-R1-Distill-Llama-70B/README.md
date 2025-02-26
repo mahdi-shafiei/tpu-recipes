@@ -13,11 +13,9 @@ This recipe outlines the steps to benchmark the inference of [DeepSeek-R1-Distil
 7. [Run MMLU benchmark](#step-7-run-mmlu-benchmark)
 8. [Run MATH500 benchmark](#step-8-run-math500-benchmark)
 
-
 ## Step 1: Create a TPU v6e VM
 
-This recipe sets up a v6e TPU VM as [queued resources](https://cloud.google.com/tpu/docs/queued-resources). Follow the steps in the documentation to
-[provision the Cloud TPU environment](https://cloud.google.com/tpu/docs/v6e-intro#provision-cloud-tpu).
+This recipe sets up a v6e TPU VM as [queued resources](https://cloud.google.com/tpu/docs/queued-resources). Follow the steps in the documentation to [provision the Cloud TPU environment](https://cloud.google.com/tpu/docs/v6e-intro#provision-cloud-tpu).
 
 Before provisioning the environment, verify all the [prerequisites](https://cloud.google.com/tpu/docs/v6e-intro/#provision-cloud-tpu) are met.
 
@@ -31,22 +29,30 @@ Before provisioning the environment, verify all the [prerequisites](https://clou
 
 In a Cloud Shell, create the following environment variables:
 
-``` bash
+```
 export PROJECT_ID="[your-project-id]"
 export PROJECT_NUMBER=$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")
 export NODE_ID=inference-tpu-v6e-8
+export ZONE=[supported-zone]
 export ACCELERATOR_TYPE=v6e-8
-export ZONE=europe-west4-a
 export RUNTIME_VERSION=v2-alpha-tpuv6e
 export SERVICE_ACCOUNT=${PROJECT_NUMBER}-compute@developer.gserviceaccount.com
 export QUEUED_RESOURCE_ID=${NODE_ID}-${ZONE}
 ```
 
+`PROJECT_ID`: Google Cloud Project Name. Use an existing project or create a new one at
+`NODE_ID`: The user-assigned ID of the TPU which is created when the queued resource request is allocated.
+`ZONE`: See the [TPU regions and zones](https://cloud.google.com/tpu/docs/regions-zones) document for the supported zones.
+`ACCELERATOR_TYPE`: v6e-8
+`RUNTIME_VERSION`: v2-alpha-tpuv6e
+`SERVICE_ACCOUNT`: This is the email address for your service account that you can find in Google Cloud Console \-\> IAM \-\> Service Accounts. For example: tpu-service-account@\<your\_project\_ID\>.iam.gserviceaccount.com.com
+`QUEUED_RESOURCE_ID`: The user-assigned text ID of the queued resource request.
+
 * Create a Hyperdisk Balanced disk of size 500GB
 
 By default, a TPU VM includes a 100GB boot disk. For working with DeepSeek-R1-Distill-Llama-70B, you would need additional storage for checkpoint conversion and processing. Create and attach a [Hyperdisk Balanced disk](https://cloud.google.com/compute/docs/disks/add-hyperdisk) of size 500GB to the TPU VM. Ensure you format and mount the disk.
 
-``` bash
+```
 gcloud compute disks create ${NODE_ID}-hd \
     --size 500GB  \
     --zone ${ZONE} \
@@ -54,11 +60,9 @@ gcloud compute disks create ${NODE_ID}-hd \
     --project ${PROJECT_ID}
 ```
 
-
 * (optional) Use a custom network for better performance as well as to avoid having the default network becoming overloaded. Please refer to the [network performance optimizations](https://cloud.google.com/tpu/docs/v6e-intro/#network_performance_optimizations) for more details.
 
-
-``` bash
+```
 export NETWORK_NAME=${PROJECT_ID}-mtu9k
 export NETWORK_FW_NAME=${NETWORK_NAME}-fw
 
@@ -74,9 +78,9 @@ gcloud compute firewall-rules create ${NETWORK_FW_NAME} \
   --project=${PROJECT_ID}
 ```
 
-* Create Cloud Storage bucket to store model checkpoints. It's recommended to create bucket in the same region as the TPU VM.
+* Create a Cloud Storage bucket to store model checkpoints. It's recommended to create a bucket in the same region as the TPU VM.
 
-``` bash
+```
 export GCS_REGION=eu
 export GCS_BUCKET="[your-bucket-name]"
 
@@ -88,7 +92,7 @@ gcloud storage buckets create gs://${GCS_BUCKET} \
 
 * [Provision a v6e TPU VM](https://cloud.google.com/tpu/docs/v6e-intro/#provision-queued-resource) with 8 chips (v6e-8) attached with disk using queued resources.
 
-``` bash
+```
 gcloud alpha compute tpus queued-resources create $QUEUED_RESOURCE_ID \
   --node-id $NODE_ID \
   --project $PROJECT_ID \
@@ -103,13 +107,13 @@ gcloud alpha compute tpus queued-resources create $QUEUED_RESOURCE_ID \
 
 * Connect to your TPU VMs using SSH
 
-``` bash
+```
 gcloud alpha compute tpus tpu-vm ssh ${NODE_ID} --project ${PROJECT_ID} --zone=${ZONE}
 ```
 
 ## Step 2: Download JetStream and MaxText GitHub repository
 
-``` bash
+```
 cd ~
 git clone https://github.com/AI-Hypercomputer/maxtext.git
 git clone https://github.com/AI-Hypercomputer/JetStream.git
@@ -119,7 +123,7 @@ git clone https://github.com/AI-Hypercomputer/JetStream.git
 
 * Create a Python virtual environment
 
-``` bash
+```
 cd ~
 sudo apt install python3.10-venv
 python -m venv venv-maxtext
@@ -128,7 +132,7 @@ source venv-maxtext/bin/activate
 
 * Install JetStream benchmarks dependencies
 
-``` bash
+```
 cd ~
 cd JetStream
 pip install -e .
@@ -138,7 +142,7 @@ pip install -r requirements.in
 
 * Install maxtext
 
-``` bash
+```
 cd ~
 cd maxtext/
 bash setup.sh
@@ -146,7 +150,7 @@ bash setup.sh
 
 * Install additional dependencies
 
-``` bash
+```
 pip install -U "huggingface_hub[cli]" hf_transfer scikit-learn
 pip install torch --index-url https://download.pytorch.org/whl/cpu
 python -m nltk.downloader punkt_tab
@@ -157,7 +161,7 @@ huggingface-cli login --token $HF_TOKEN
 
 ## Step 4: Configure environment variables
 
-``` bash
+```
 export LOCAL_DIR=/mnt/disks/persist
 export HOME_DIR=$(bash -c "cd ~ && pwd")
 export GCS_BUCKET="[your-bucket-name]"
@@ -179,13 +183,13 @@ sudo mkdir -p ${LOCAL_DIR}
 
 * Download checkpoint from hugging face
 
-``` bash
+```
 huggingface-cli download deepseek-ai/DeepSeek-R1-Distill-Llama-70B --local-dir $CHECKPOINT_ORIGINAL
 ```
 
 * Convert Hugging Face to MaxText compatible checkpoint
 
-``` bash
+```
 cd ~
 cd maxtext/
 JAX_PLATFORMS=cpu python MaxText/llama_or_mistral_ckpt.py \
@@ -240,10 +244,9 @@ I0222 00:27:10.324101 1251089 google_auth_provider.cc:181] Running on GCE, using
 saved a checkpoint at step 0
 ```
 
-
 ## Step 6: Unscan the checkpoint to be used for serving
 
-``` bash
+```
 cd ~
 cd maxtext/
 JAX_PLATFORMS=cpu python MaxText/generate_param_only_checkpoint.py \
@@ -295,7 +298,7 @@ Successfully generated decode checkpoint at: gs://[your-bucket-name]/DeepSeek-R1
 
 * Verify the checkpoint by running the following command
 
-``` bash
+```
 cd ~
 cd maxtext/
 JAX_PLATFORMS=tpu python MaxText/decode.py \
@@ -342,7 +345,7 @@ I don't have time to read`
 
 * Verify the checkpoint by running the following command with KV cache quantization
 
-``` bash
+```
 cd ~
 cd maxtext/
 JAX_PLATFORMS=tpu python MaxText/decode.py \
@@ -392,7 +395,7 @@ I don't have time to read`
 
 * Download MMLU dataset
 
-``` bash
+```
 mkdir -p ${LOCAL_DIR}/mmlu
 cd ${LOCAL_DIR}/mmlu
 wget https://people.eecs.berkeley.edu/~hendrycks/data.tar -P ${LOCAL_DIR}/mmlu
@@ -401,9 +404,9 @@ tar -xvf data.tar
 
 ### Start MaxText Engine server
 
-To run benchmark, open two SSH sessions connected to the TPU VM. In the first SSH session, start the MaxText Engine server with the following configuration:
+To run the benchmark, open two SSH sessions connected to the TPU VM. In the first SSH session, start the MaxText Engine server with the following configuration:
 
-``` bash
+```
 cd ~
 cd maxtext/
 export MAX_PREFILL_PREDICT_LENGTH=1024
@@ -511,7 +514,9 @@ GC tweaked (allocs, gen1, gen2):  60000 20 30
 
 After MaxText Engine server is running, in the second SSH session to the TPU VM, start the MMLU benchmarking with following configuration:
 
-``` bash
+```
+cd ~
+source venv-maxtext/bin/activate
 cd ~/JetStream
 JAX_PLATFORMS=tpu python benchmarks/benchmark_serving.py \
   --tokenizer=$TOKENIZER_PATH \
@@ -575,8 +580,6 @@ P99 TPOT: xxx ms
 [nltk_data]   Package punkt is already up-to-date!
 
 Results
-
-{'accuracy': 0.7518, 'gen_num': 963}
 ```
 
 ## Step 8: Run [MATH500](https://huggingface.co/datasets/HuggingFaceH4/MATH-500) benchmark
@@ -585,19 +588,18 @@ Results
 
 To run benchmark, open two SSH sessions connected to the TPU VM. In the first SSH session, start the MaxText Engine server with the following configuration:
 
-``` bash
+```
 cd ~
 cd maxtext/
 export MAX_PREFILL_PREDICT_LENGTH=1024
-export MAX_TARGET_LENGTH=2048
+export MAX_TARGET_LENGTH=8192
 export MODEL_NAME=llama3.1-70b
 export ICI_FSDP_PARALLELISM=1
 export ICI_AUTOREGRESSIVE_PARALLELISM=1
 export ICI_TENSOR_PARALLELISM=-1
 export SCAN_LAYERS=false
 export WEIGHT_DTYPE=bfloat16
-export PER_DEVICE_BATCH_SIZE=20
-
+export PER_DEVICE_BATCH_SIZE=4
 
 # Set XLA flags
 export LIBTPU_INIT_ARGS=""" --=false
@@ -667,18 +669,22 @@ python MaxText/maxengine_server.py \
 
 After MaxText Engine server is running, in the second SSH session to the TPU VM, start the MATH500 benchmarking with following configuration:
 
-``` bash
+```
+cd ~
+source venv-maxtext/bin/activate
 cd ~/JetStream
 JAX_PLATFORMS=tpu python benchmarks/benchmark_serving.py \
-  --tokenizer=$TOKENIZER_PATH \
-  --num-prompts 500 \
+  --model=llama-3 \
   --dataset math500 \
+  --num-prompts 500 \
   --request-rate 5 \
   --warmup-mode sampled \
+  --max-output-length 8192 \
+  --max-output-multiplier=20 \
+  --max-input-length=1024 \
+  --run-eval True \
   --save-request-outputs \
-  --model=llama-3 \
   --save-result \
-  --max-output-length 1024 \
   --request-outputs-file-path ${LOCAL_DIR}/benchmarks/math500_outputs.json
 ```
 
@@ -687,14 +693,11 @@ After the MATH500 benchmark run is completed successfully, you will see logs sim
 ```
 Using llama-3 tokenizer: /home/user/maxtext/assets/tokenizer_llama3.tiktoken
 len(sampled_indices)=500
-In InputRequest, pass in actual output_length for each sample
+In InputRequest, pass in max_output_length: 8192 for each sample
 The dataset contains 500 samples.
 The filtered dataset contains 500 samples.
 Warmup (mode: sampled) is starting.
 Benchmarking with a total number of 14 requests
-Benchmarking with request rate of 5.0
-...
-Benchmarking with a total number of 500 requests
 Benchmarking with request rate of 5.0
 ...
 Mean output size: xxxx
@@ -716,13 +719,20 @@ P99 ttst: xxxx ms
 Mean TPOT: xx ms
 Median TPOT: xx ms
 P99 TPOT: xx ms
+
+----- Request complete rate time series (window_size = 10 sec) -----
+...
+----- Output token rate time series (window_size = 10 sec) -----
+...
+
+Results
 ```
 
 ## Cleanup
 
 * Delete v6e TPU VM
 
-``` bash
+```
 gcloud compute tpus tpu-vm delete $NODE_ID \
   --project=$PROJECT_ID \
   --zone=$ZONE \
@@ -731,6 +741,6 @@ gcloud compute tpus tpu-vm delete $NODE_ID \
 
 * Delete Cloud Storage buckets
 
-``` bash
+```
 gcloud storage buckets delete ${GCS_BUCKET}
 ```
