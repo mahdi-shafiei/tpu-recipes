@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ .Release.Name }}"
+data:
+  maxtext-configuration.yaml: |- 
+    {{- range $key, $value := .Values.maxtext_config }}
+    {{ $key }}: {{ $value }}
+    {{- end }}
+
+  libtpu-init-args: |-
+      --=false
+      {{- range $key, $value := .Values.xla_flags }}
+      --{{ $key }}={{ $value }}
+      {{- end }}
