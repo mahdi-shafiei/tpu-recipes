@@ -8,7 +8,9 @@ git checkout ${MAXTEXT_HASH}
 
 2. Run the following commands to build the docker image
 ```
-bash docker_build_dependency_image.sh DEVICE=tpu MODE=stable_stack BASEIMAGE=us-docker.pkg.dev/cloud-tpu-images/jax-stable-stack/tpu:jax0.4.35-rev1
+# Example BASE_IMAGE=us-docker.pkg.dev/cloud-tpu-images/jax-stable-stack/tpu:jax0.4.35-rev1
+BASE_IMAGE=<stable_stack_image_with_desired_jax_version>
+bash docker_build_dependency_image.sh DEVICE=tpu MODE=stable_stack BASEIMAGE=${BASE_IMAGE}
 ```
 
 3. Upload your docker image to Container Registry

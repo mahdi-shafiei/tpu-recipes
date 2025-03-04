@@ -1,4 +1,4 @@
-# Instructions for training Llama3.1-8B-MaxText on TPU trillium
+# Instructions for training Llama3.1-8B-MaxText on TPU trillium (v6e-256)
 
 ## XPK setup
 Please follow this [link](https://github.com/AI-Hypercomputer/tpu-recipes/blob/main/training/trillium/XPK_README.md) to create your GKE cluster with XPK
@@ -18,7 +18,7 @@ libtpu-nightly=20241209
 
 ### Starting workload
 
-From the MaxText root directory, start your Llama3.1-8B workload.
+From the MaxText root directory, start your Llama3.1-8B workload. Note: this benchmark uses a different model name than the equivalent v6e-8 recipe.
 ```
 python3 benchmarks/benchmark_runner.py --project=$PROJECT --zone=$ZONE --device_type=v6e-256 --num_slices=1  --cluster_name=${CLUSTER_NAME} --base_output_directory=${OUTPUT_DIR} \
 --model_name="llama3_1_8b_8192" --libtpu_version=20241209 --base_docker_image maxtext_base_image
