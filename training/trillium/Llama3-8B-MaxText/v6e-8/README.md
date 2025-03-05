@@ -3,22 +3,24 @@
 ## XPK setup
 Please follow this [link](https://github.com/AI-Hypercomputer/tpu-recipes/blob/main/training/trillium/XPK_README.md) to create your GKE cluster with XPK
 
-## Prep for Maxtext 
-Please follow this [link](https://github.com/AI-Hypercomputer/tpu-recipes/blob/main/training/trillium/MAXTEXT_README.md) to install maxtext and build docker image. In step 2, be sure to use the jax-stable-stack image containing JAX 0.4.37:
-
-```
-BASE_IMAGE=BASEIMAGE=us-docker.pkg.dev/cloud-tpu-images/jax-stable-stack/tpu:jax0.4.37-rev1
-bash docker_build_dependency_image.sh DEVICE=tpu MODE=stable_stack BASEIMAGE=${BASE_IMAGE}
-```
-
-## Run Maxtext Llama3.1-8B workloads on GKE
+## Prep for Maxtext
 
 ### Test Env
-Use the MaxText [tpu-recipes-v0.1.0](https://github.com/AI-Hypercomputer/maxtext/releases/tag/tpu-recipes-v0.1.0) tag to run this recipe. This can be done using the following command from you local MaxText directory:
+Use the MaxText [tpu-recipes-v0.1.0](https://github.com/AI-Hypercomputer/maxtext/releases/tag/tpu-recipes-v0.1.0) tag to run this recipe. This can be done using the following command from your local MaxText directory:
 
 ```
 git checkout tpu-recipes-v0.1.0
 ```
+
+### Install MaxText and Build Docker Image
+Please follow this [link](https://github.com/AI-Hypercomputer/tpu-recipes/blob/main/training/trillium/MAXTEXT_README.md) to install maxtext and build docker image. In step 2, be sure to use the jax-stable-stack image containing JAX 0.4.37:
+
+```
+BASE_IMAGE=us-docker.pkg.dev/cloud-tpu-images/jax-stable-stack/tpu:jax0.4.37-rev1
+bash docker_build_dependency_image.sh DEVICE=tpu MODE=stable_stack BASEIMAGE=${BASE_IMAGE}
+```
+
+## Run Maxtext Llama3.1-8B workloads on GKE
 
 ### Starting workload
 
