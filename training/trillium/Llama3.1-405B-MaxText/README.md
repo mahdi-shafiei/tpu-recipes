@@ -3,27 +3,78 @@
 ## XPK setup
 Please follow this [link](https://github.com/AI-Hypercomputer/tpu-recipes/blob/main/training/trillium/XPK_README.md) to create your GKE cluster with XPK
 
-## Prep for Maxtext 
-Please follow this [link](https://github.com/AI-Hypercomputer/tpu-recipes/blob/main/training/trillium/MAXTEXT_README.md) to install maxtext and build docker image
-
-## Run Maxtext Llama3.1-405B workloads on GKE
+## Prep for Maxtext
 
 ### Test Env
-jaxlib=0.4.35
+Use the MaxText [tpu-recipes-v0.1.0](https://github.com/AI-Hypercomputer/maxtext/releases/tag/tpu-recipes-v0.1.0) tag to run this recipe. This can be done using the following command from your local MaxText directory:
 
-libtpu-nightly=20241028
+```
+git checkout tpu-recipes-v0.1.0
+```
 
-[maxtext](https://github.com/AI-Hypercomputer/maxtext.git)@e7292a3a572792a0d797fc8977b21d0f255729f1
+### Install MaxText and Build Docker Image
+Please follow this [link](https://github.com/AI-Hypercomputer/tpu-recipes/blob/main/training/trillium/MAXTEXT_README.md) to install maxtext and build docker image. In step 2, be sure to use the jax-stable-stack image containing JAX 0.4.37:
+
+```
+BASE_IMAGE=us-docker.pkg.dev/cloud-tpu-images/jax-stable-stack/tpu:jax0.4.37-rev1
+bash docker_build_dependency_image.sh DEVICE=tpu MODE=stable_stack BASEIMAGE=${BASE_IMAGE}
+```
+
+## Run Maxtext Llama3.1-405B workloads on GKE
 
 ### Starting workload
 
 From the MaxText root directory, start your Llama3.1-405B workload.
 ```
-python3 benchmarks/benchmark_runner.py --project=$PROJECT --zone=$ZONE --device_type=v6e-256 --num_slices=2  --cluster_name=${CLUSTER_NAME} --base_output_directory=${OUTPUT_DIR} \
---model_name="llama3_1_405b_8192_fsdp_dcn" --libtpu_version=20241028 --base_docker_image maxtext_base_image
+python3 benchmarks/benchmark_runner.py xpk \
+    --project=$PROJECT \
+    --zone=$ZONE \
+    --device_type=v6e-256 \
+    --num_slices=2  \
+    --cluster_name=${CLUSTER_NAME} \
+    --base_output_directory=${OUTPUT_DIR} \
+    --model_name="llama3_1_405b_8192_pure_fsdp_ici" \
+    --base_docker_image=maxtext_base_image
 ```
 
 From your workload logs, you should start seeing step time logs like the following:
 ```
-completed step: 5, seconds: 58.805, TFLOP/s/device: 365.740, Tokens/s/device: 139.307, total_weights: 4194304, loss: 0.000
+completed step: 10, seconds: 52.121, TFLOP/s/device: 412.644, Tokens/s/device: 157.172, total_weights: 4194304, loss: 2.336
 ```
+
+### Workload Details
+
+For reference, here are the `llama3_1_405b_8192_pure_fsdp_ici` workload details as found in `MaxText@tpu-recipes-v0.1.0`:
+
+```
+MaxTextModel(
+    model_name="llama3-1-405b-8192-pure-fsdp-ici",
+    model_type="llama3.1-405b",
+    tuning_params={
+        "per_device_batch_size": 1,
+        "ici_fsdp_parallelism": 256,
+        "dcn_fsdp_parallelism": 2,
+        "remat_policy": "custom",
+        "decoder_layer_input": "offload",
+        "max_target_length": 8192,
+        "attention": "flash",
+        "gcs_metrics": True,
+        "use_iota_embed": True,
+        "dataset_path": "gs://max-datasets-rogue",
+        "dataset_type": "synthetic",
+        "reuse_example_batch": 1,
+        "enable_checkpointing": False,
+        "profiler": "xplane",
+        "sa_block_q": 1024,
+        "sa_block_q_dkv": 2048,
+        "sa_block_q_dq": 2048,
+    },
+    xla_flags=(
+        xla_flags_library.DENSE_VMEM_LIMIT_FLAG
+        + xla_flags_library.CF_FOR_ALL_GATHER
+        + xla_flags_library.HOST_OFFLOAD_FLAGS
+    ),
+)
+```
+
+This equivalent workload code can be found in the [maxtext_trillium_model_configs.py](https://github.com/AI-Hypercomputer/maxtext/blob/tpu-recipes-v0.1.0/benchmarks/maxtext_trillium_model_configs.py#L767) file within the MaxText repository.
