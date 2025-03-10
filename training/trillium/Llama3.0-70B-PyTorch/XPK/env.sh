@@ -12,6 +12,6 @@ export BATCH_PER_DEVICE=2
 export SEQUENCE_LENGTH=4096
 export MAX_STEP=50
 export WORKLOAD_NAME=${USER}-xpk-${TPU_TYPE}-... # Your workload name. Need to update for different run.
-export BASE_DOCKER_IMAGE=us-central1-docker.pkg.dev/deeplearning-images/reproducibility/pytorch-tpu-llama@sha256:017a81a161ad8b226b97a816f69f18274e90ac5841dc2586b3bb45a6c2bbca0c
+export BASE_DOCKER_IMAGE=us-central1-docker.pkg.dev/deeplearning-images/reproducibility/pytorch-tpu-llama@sha256:310c661423206337ef27ed06597830c52ae03c3383af411a89b3be9e4bc10aca
 export PROFILE_LOG_DIR=... # GSC bucket to store profile in form of gs://...
 export HF_TOKEN=... # Add your onw Hugging face token to download model
