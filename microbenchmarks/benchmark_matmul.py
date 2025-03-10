@@ -30,11 +30,8 @@ def get_dtype(dtype: str):
   raise ValueError(f"Invalid data type: {dtype}")
 
 
-def main() -> dict[str, Any]:
-  """Benchmark for matrix multiplication.
-
-  Returns: a dict summarizing the benchmark result.
-  """
+def main():
+  """Benchmark for matrix multiplication."""
   parser = argparse.ArgumentParser(
       description="Run matrix multiplication benchmark."
   )
@@ -135,19 +132,10 @@ def main() -> dict[str, Any]:
   compute_flops = m * n * k * a.itemsize * 2 / mxu_bytes_per_op
   throughput = compute_flops / result.time_median / 1e12
 
-  ret = {
-      "dtype": dtype.__name__,
-      "matrix_dimensions": (m, n, k),
-      "time_median_ms": result.time_median * 1e3,
-      "tflops_per_sec_median": throughput,
-      "time_min_ms": result.time_min * 1e3,
-      "tflops_per_sec_max": compute_flops / result.time_min / 1e12,
-  }
   print(
       f"dtype: {dtype.__name__}, matrix Dimensions: ({m}, {n}, {k}), time taken"
       f" (median): {result.time_median * 1e3} ms, TFLOPs/sec: {throughput}"
   )
-  return ret
 
 
 if __name__ == "__main__":

@@ -30,10 +30,8 @@ def get_dtype(dtype: str):
 
 
 def main() -> dict[str, Any]:
-  """Benchmark for HBM bandwidth.
+  """Benchmark for HBM bandwidth."""
 
-  Returns: a dict summarizing the benchmark result.
-  """
   parser = argparse.ArgumentParser(
       description="Run HBM bandwidth benchmark."
   )
@@ -125,17 +123,8 @@ def main() -> dict[str, Any]:
 
   tensor_size = n * a.itemsize
   bw_gbps = (tensor_size * 2) / result.time_median / 1e9  # read + write = 2
-  ret = {
-      "dtype": dtype.__name__,
-      "tensor_size_bytes": n * a.itemsize,
-      "time_median_ms": result.time_median * 1000,
-      "time_min_ms": result.time_min * 1000,
-      "bandwidth_gbps_median": bw_gbps,
-      "bandwidth_gbps_max": (tensor_size * 2) / result.time_min / 1e9,
-  }
 
   print(f"Tensor size: {tensor_size / 1024**2} MB, time taken (median): {result.time_median * 1000:.4f} ms, bandwidth: {bw_gbps:.2f} GBps")
-  return ret
 
 
 if __name__ == "__main__":
