@@ -8,14 +8,14 @@ PROFILE_STEP=3
 PROFILE_DURATION_MS=120000
 PROFILE_LOGDIR=/tmp/home/profile
 XLA_USE_SPMD=1
-MAX_STEPS=20
-SEQ_LENGTH=8192
+MAX_STEPS=50
+SEQ_LENGTH=4096
 
 # Per-host batch size is the number of training examples used by a TPU VM
 # in each training step. For Trillium, it will be 4 times the per-device batch size,
 # since each TPU VM is connected to 4 Trillium TPU chips. The following will lead
 # to a per-device batch size of 1. Customize accordingly.
-PER_HOST_BATCH_SIZE=4
+PER_HOST_BATCH_SIZE=2
 
 # XLA flags
 # Quoting is not needed, c.f. https://github.com/moby/moby/issues/46773
