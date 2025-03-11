@@ -22,7 +22,6 @@ export PROFILE_STEP=3
 export PROFILE_DURATION_MS=100000
 export PROFILE_LOGDIR=${PROFILE_LOG_DIR}
 export XLA_PERSISTENT_CACHE_PATH=/app/xla_cache/
-export TPU_LIBRARY_PATH=/workspace/_libtpu.so
 export NUM_TPU_SLICE=${NUM_SLICE}
 export LIBTPU_INIT_ARGS="--xla_tpu_enable_flash_attention=false --xla_tpu_enable_async_collective_fusion=true --xla_tpu_enable_async_collective_fusion_fuse_all_gather=true --xla_tpu_enable_async_collective_fusion_multiple_steps=true --xla_tpu_overlap_compute_collective_tc=true --xla_enable_async_all_gather=true --xla_tpu_scoped_vmem_limit_kib=81920"
 
@@ -30,7 +29,7 @@ huggingface-cli login --token=${HF_TOKEN}
 
 # Note --per_device_train_batch_size is the global batch size since we overwrite the dataloader in the HF trainer.
 # --static uses the dropping implementation for MoE.
-python3 /workspace/transformers/examples/pytorch/language-modeling/run_clm.py \
+python3 /workspaces/transformers/examples/pytorch/language-modeling/run_clm.py \
 --dataset_name=wikitext --dataset_config_name=wikitext-103-raw-v1 \
 --per_device_train_batch_size=${GLOBAL_BATCH_SIZE} --do_train --output_dir=test-clm \
 --overwrite_output_dir --config_name=/app/config.json \

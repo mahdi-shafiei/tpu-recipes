@@ -42,7 +42,7 @@ HF_TOKEN=hf_***
 3. Edit `host.sh` to add the docker image URL if default docker image is not accessible to you.
 ```bash
 # docker image URL to use for the training
-DOCKER_IMAGE=us-central1-docker.pkg.dev/deeplearning-images/reproducibility/pytorch-tpu-mixtral:v0
+DOCKER_IMAGE=us-central1-docker.pkg.dev/deeplearning-images/reproducibility/pytorch-tpu-mixtral:dropping
 ```
 4. Run the training script:
 ```bash
@@ -52,11 +52,11 @@ DOCKER_IMAGE=us-central1-docker.pkg.dev/deeplearning-images/reproducibility/pyto
 ```
 ***** train metrics *****
 [worker :3] ***** train metrics *****
-[worker :3]   epoch                    =      0.0391
-[worker :3]   total_flos               = 216428520GF
-[worker :3]   train_loss               =       8.443
-[worker :3]   train_runtime            =  0:04:23.15
-[worker :3]   train_samples            =       32816
-[worker :3]   train_samples_per_second =       4.864
+[worker :3]   epoch                    =      <num_epochs>
+[worker :3]   total_flos               =      <floating point ops per sec>
+[worker :3]   train_loss               =      <loss>
+[worker :3]   train_runtime            =      <total_runtime>
+[worker :3]   train_samples            =      <global number of samples>
+[worker :3]   train_samples_per_second =      <global number of samples per sec>
 ```
 In addition,  it will copy back the trained model under `output/*`.
