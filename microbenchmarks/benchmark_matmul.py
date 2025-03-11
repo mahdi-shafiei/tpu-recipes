@@ -126,10 +126,8 @@ def main():
       event_matcher=matcher,
   )
 
-  # MXU is done in units of bf16.
-  mxu_bytes_per_op = 2
   # 2 ops (multiple and add)
-  compute_flops = m * n * k * a.itemsize * 2 / mxu_bytes_per_op
+  compute_flops = m * n * k * 2
   throughput = compute_flops / result.time_median / 1e12
 
   print(
