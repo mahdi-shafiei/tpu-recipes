@@ -126,7 +126,7 @@ def main():
       event_matcher=matcher,
   )
 
-  # 2 ops (multiple and add)
+  # 2 ops (multiply and add)
   compute_flops = m * n * k * 2
   throughput = compute_flops / result.time_median / 1e12
 
