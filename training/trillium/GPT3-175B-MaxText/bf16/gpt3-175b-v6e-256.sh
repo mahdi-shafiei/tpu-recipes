@@ -1,9 +1,9 @@
 python3 benchmarks/benchmark_runner.py xpk \
-    --project=${PROJECT} \
-    --zone=${ZONE} \
+    --project=$PROJECT \
+    --zone=$ZONE \
     --device_type=v6e-256 \
-    --num_slices=2  \
-    --cluster_name=${CLUSTER_NAME} \
+    --num_slices=1  \
+    --cluster_name=${CLUSTER_NAME}  \
     --base_output_directory=${OUTPUT_DIR} \
-    --model_name="mixtral_8x7b_dropped" \
+    --model_name="gpt_3_175b_bf16" \
     --base_docker_image=maxtext_base_image

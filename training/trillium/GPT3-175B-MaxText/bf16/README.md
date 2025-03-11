@@ -1,4 +1,4 @@
-# Instructions for training Llama2-70B-Maxtext on TPU trillium
+# Instructions for training GPT3-175B-Maxtext on TPU trillium
 
 ## XPK setup
 Please follow this [link](https://github.com/AI-Hypercomputer/tpu-recipes/blob/main/training/trillium/XPK_README.md) to create your GKE cluster with XPK
@@ -20,48 +20,44 @@ BASE_IMAGE=us-docker.pkg.dev/cloud-tpu-images/jax-stable-stack/tpu:jax0.4.37-rev
 bash docker_build_dependency_image.sh DEVICE=tpu MODE=stable_stack BASEIMAGE=${BASE_IMAGE}
 ```
 
-## Run Maxtext Llama2-70B workloads on GKE
+## Run Maxtext GPT3-175B workloads on GKE
 
 ### Starting workload
 
-From the MaxText root directory, start your Llama2-70B workload
+From the MaxText root directory, start your GPT3-175B workload
 ```
 python3 benchmarks/benchmark_runner.py xpk \
     --project=$PROJECT \
     --zone=$ZONE \
     --device_type=v6e-256 \
     --num_slices=1  \
-    --cluster_name=${CLUSTER_NAME} \
+    --cluster_name=${CLUSTER_NAME}  \
     --base_output_directory=${OUTPUT_DIR} \
-    --model_name="llama2_70b_4096_sc" \
+    --model_name="gpt_3_175b_bf16" \
     --base_docker_image=maxtext_base_image
 ```
 
 From your workload logs, you should start seeing step time logs like the following:
 ```
-completed step: 10, seconds: 8.799, TFLOP/s/device: 413.814, Tokens/s/device: 930.984, total_weights: 2097152, loss: 3.499
+completed step: 11, seconds: 16.852, TFLOP/s/device: 392.440, Tokens/s/device: 364.593, total_weights: 1572864, loss: 414.684
 ```
 
 ### Workload Details
 
-For reference, here are the `llama2_70b_4096_sc` workload details as found in `MaxText@tpu-recipes-v0.1.0`:
+For reference, here are the `gpt_3_175b_bf16` workload details as found in `MaxText@tpu-recipes-v0.1.0`:
 
 ```
 MaxTextModel(
-    model_name="llama2-70b-4096-sc",
-    model_type="llama2-70b",
+    model_name="gpt-3-175b-bf16",
+    model_type="gpt3-175b",
     tuning_params={
-        "per_device_batch_size": 2,
-        "ici_fsdp_parallelism": 1,
-        "ici_fsdp_transpose_parallelism": -1,
-        "ici_tensor_parallelism": 1,
-        "remat_policy": "qkv_proj_offloaded",
-        "max_target_length": 4096,
+        "per_device_batch_size": 3,
+        "ici_fsdp_parallelism": -1,
+        "remat_policy": "full",
         "attention": "flash",
         "gcs_metrics": True,
-        "use_iota_embed": True,
-        "dataset_path": "gs://max-datasets-rogue",
         "dataset_type": "synthetic",
+        "reuse_example_batch": 1,
         "enable_checkpointing": False,
         "profiler": "xplane",
         "sa_block_q": 1024,
@@ -71,10 +67,10 @@ MaxTextModel(
     xla_flags=(
         xla_flags_library.DENSE_VMEM_LIMIT_FLAG
         + xla_flags_library.CF_FOR_ALL_GATHER
-        + xla_flags_library.ENABLE_SPARSECORE_OFFLOADING_FOR_ALL_REDUCE
+        + xla_flags_library.DATA_PARALLEL_OVERLAP
+        + xla_flags_library.DISABLE_BUNDLE_AWARE_COST_MODEL
     ),
-    ...
 )
 ```
 
-This equivalent workload code can be found in the [maxtext_trillium_model_configs.py](https://github.com/AI-Hypercomputer/maxtext/blob/tpu-recipes-v0.1.0/benchmarks/maxtext_trillium_model_configs.py#L410) file within the MaxText repository.
+This equivalent workload code can be found in the [maxtext_trillium_model_configs.py](https://github.com/AI-Hypercomputer/maxtext/blob/tpu-recipes-v0.1.0/benchmarks/maxtext_trillium_model_configs.py#L287) file within the MaxText repository.
