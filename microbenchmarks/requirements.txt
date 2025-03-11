@@ -1,2 +1,1 @@
 jax[tpu]
-tensorboard-plugin-profile
