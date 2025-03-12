@@ -1,5 +1,6 @@
 """Utilities for benchmarks."""
 
+from collections import defaultdict
 from dataclasses import dataclass
 import gzip
 import json
@@ -88,8 +89,20 @@ def get_benchmark_result(events: list[dict[str, Any]]) -> BenchmarkResult:
   Returns:
     A summary of the benchmark result.
   """
+  # Data could be distributed onto multiple cores. We approximate the runtime to
+  # be the maximum duration of all events with the same run_id.
+  events_by_run_id = defaultdict(list)
+  for e in events:
+    run_id = (
+        e["args"]["run_id"] if "args" in e and "run_id" in e["args"] else "0"
+    )
+    events_by_run_id[run_id].append(e)
+
   try:
-    durations = [e["dur"] / 1e6 for e in events]
+    durations = [
+        max([e["dur"] for e in es]) / 1e6
+        for run_id, es in events_by_run_id.items()
+    ]
   except KeyError:
     print("KeyError: Key 'dur' not found in the event object")
     raise
@@ -141,6 +154,5 @@ def run_bench(
   if not event_matcher:
     event_matcher = re.compile(func_label)
   events = get_eligible_events(trace, event_matcher)
-  assert len(events) == num_iter
 
   return get_benchmark_result(events)
