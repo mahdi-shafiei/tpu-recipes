@@ -3,7 +3,9 @@
 ```
 git clone https://github.com/google/maxtext.git
 cd maxtext
-git checkout ${MAXTEXT_HASH}
+# Checkout either the commit id or MaxText tag. 
+# Example: `git checkout tpu-recipes-v0.1.0`
+git checkout ${MAXTEXT_COMMIT_ID_OR_TAG}
 ```
 
 2. Run the following commands to build the docker image

@@ -5,16 +5,15 @@ Please follow this [link](https://github.com/AI-Hypercomputer/tpu-recipes/blob/m
 
 ## Prep for Maxtext 
 
-### Test Env
-Use the MaxText [tpu-recipes-v0.1.0](https://github.com/AI-Hypercomputer/maxtext/releases/tag/tpu-recipes-v0.1.0) tag to run this recipe. This can be done using the following command from your local MaxText directory:
+### Install MaxText and Build Docker Image
+Please follow this [link](https://github.com/AI-Hypercomputer/tpu-recipes/blob/main/training/trillium/MAXTEXT_README.md) to install maxtext and build the docker image. The following variables should be set:
 
+In step 1, use the MaxText [tpu-recipes-v0.1.0](https://github.com/AI-Hypercomputer/maxtext/releases/tag/tpu-recipes-v0.1.0) tag to run this recipe:
 ```
 git checkout tpu-recipes-v0.1.0
 ```
 
-### Install MaxText and Build Docker Image
-Please follow this [link](https://github.com/AI-Hypercomputer/tpu-recipes/blob/main/training/trillium/MAXTEXT_README.md) to install maxtext and build docker image. In step 2, be sure to use the jax-stable-stack image containing JAX 0.4.37:
-
+In step 2, use the jax-stable-stack image containing JAX 0.4.37:
 ```
 BASE_IMAGE=us-docker.pkg.dev/cloud-tpu-images/jax-stable-stack/tpu:jax0.4.37-rev1
 bash docker_build_dependency_image.sh DEVICE=tpu MODE=stable_stack BASEIMAGE=${BASE_IMAGE}
