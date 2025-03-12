@@ -93,7 +93,7 @@ def main() -> dict[str, Any]:
       type=str,
       required=False,
       help=(
-          "A regex-based string matcher to filter the trace evnets eligible for"
+          "A regex-based string matcher to filter the trace events eligible for"
           " benchmarking. This arg would be useful if we want to measure the"
           " timing of a specific op or XLA module within the function., e.g."
           " --matcher='fusion' measures the timing of XLA fusion op"

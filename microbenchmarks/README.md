@@ -18,7 +18,7 @@ gcloud compute ssh $TPU_NAME --zone=$ZONE
 
 Clone the repo and install the dependencies:
 ```bash
-git clone https://github.com/chishuen/tpu-recipes.git
+git clone https://github.com/AI-Hypercomputer/tpu-recipes.git
 cd tpu-recipes/microbenchmarks
 pip install -r requirements.txt
 ```
