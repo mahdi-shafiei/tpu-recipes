@@ -29,7 +29,7 @@ def get_dtype(dtype: str):
   raise ValueError(f"Invalid data type: {dtype}")
 
 
-def main() -> dict[str, Any]:
+def main():
   """Benchmark for HBM bandwidth."""
 
   parser = argparse.ArgumentParser(
@@ -124,7 +124,10 @@ def main() -> dict[str, Any]:
   tensor_size = n * a.itemsize
   bw_gbps = (tensor_size * 2) / result.time_median / 1e9  # read + write = 2
 
-  print(f"Tensor size: {tensor_size / 1024**2} MB, time taken (median): {result.time_median * 1000:.4f} ms, bandwidth: {bw_gbps:.2f} GBps")
+  print(
+      f"Tensor size: {tensor_size / 1024**2} MB, time taken (median):"
+      f" {result.time_median * 1000:.4f} ms, bandwidth: {bw_gbps:.2f} GBps"
+  )
 
 
 if __name__ == "__main__":

@@ -127,12 +127,12 @@ def main():
   )
 
   # 2 ops (multiply and add)
-  compute_flops = m * n * k * 2
-  throughput = compute_flops / result.time_median / 1e12
+  compute = m * n * k * 2
+  tflops = compute / result.time_median / 1e12
 
   print(
       f"dtype: {dtype.__name__}, matrix Dimensions: ({m}, {n}, {k}), time taken"
-      f" (median): {result.time_median * 1e3} ms, TFLOPs/sec: {throughput}"
+      f" (median): {result.time_median * 1e3} ms, TFLOPS: {tflops}"
   )
 
 
