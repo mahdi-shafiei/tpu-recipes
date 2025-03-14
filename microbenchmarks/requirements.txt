@@ -1,1 +1,1 @@
-jax[tpu]
+jax[tpu]==0.5.2
