@@ -4,17 +4,20 @@
 
 Set up a v6e TPU VM:
 ```
-gcloud compute tpus tpu-vm create $TPU_NAME /
-        --zone=$ZONE /
-        --accelerator-type=v6e-1  /
+gcloud compute tpus tpu-vm create ${TPU_NAME} /
+        --project ${PROJECT_ID} /
+        --zone=${ZONE} /
+        --accelerator-type=v6e-1 /
         --version=v2-alpha-tpuv6e
 ```
-See https://cloud.google.com/tpu/docs/regions-zones for available zones.
+If needed, see the full list of [available zones](https://cloud.google.com/tpu/docs/regions-zones).
 
 SSH into the VM:
 ```
-gcloud compute ssh $TPU_NAME --zone=$ZONE
+gcloud compute tpus tpu-vm ssh ${TPU_NAME} --project ${PROJECT_ID} --zone ${ZONE}
 ```
+
+More info on the previous commands can be found in the [Google Cloud documentation](https://cloud.google.com/tpu/docs/managing-tpus-tpu-vm).
 
 Clone the repo and install the dependencies:
 ```bash
