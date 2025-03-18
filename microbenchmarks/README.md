@@ -38,7 +38,7 @@ python benchmark_matmul.py \
 
 Example output:
 ```
-dtype: bfloat16, matrix Dimensions: (16384, 16384, 16384), time taken (median): 10.584555 ms, TFLOPs/sec: 831.0309712791892
+dtype: bfloat16, matrix Dimensions: (4096, 4096, 4096), time taken (median): 0.16358503900000002 ms, TFLOPS: 840.1682348958574
 ```
 
 Run `python benchmark_matmul.py -h` to view the how to set the arguments.
