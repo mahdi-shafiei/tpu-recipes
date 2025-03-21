@@ -59,12 +59,12 @@ export HF_TOKEN=<your HF token>
 Now we serve the vllm server. Make sure you keep this terminal open for the entire duration of this experiment.
 
 ```bash
-export MAX_MODEL_LEN=2048
-export TP=1 # number of chips
+export MAX_MODEL_LEN=4096
+export TP=4 # number of chips
 # export RATIO=0.8
 # export PREFIX_LEN=0
 
-VLLM_USE_V1=1 vllm serve deepseek-ai/DeepSeek-R1-Distill-Llama-8B --seed 42 --disable-log-requests --gpu-memory-utilization 0.95 --max-num-batched-tokens 512 --max-num-seqs 512 --tensor-parallel-size $TP --max-model-len $MAX_MODEL_LEN &> serve.log &
+VLLM_USE_V1=1 vllm serve deepseek-ai/DeepSeek-R1-Distill-Llama-8B --seed 42 --disable-log-requests --gpu-memory-utilization 0.95 --max-num-batched-tokens 8192 --max-num-seqs 128 --tensor-parallel-size $TP --max-model-len $MAX_MODEL_LEN
 ```
 
 It takes a few minutes depending on the model size to prepare the server - once you see the below snippet in the logs, it means that the server is ready to serve requests or run benchmarks:
