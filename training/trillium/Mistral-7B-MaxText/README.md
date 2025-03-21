@@ -13,9 +13,9 @@ In step 1, use the MaxText [tpu-recipes-v0.1.0](https://github.com/AI-Hypercompu
 git checkout tpu-recipes-v0.1.0
 ```
 
-In step 2, use the jax-stable-stack image containing JAX 0.4.37:
+In step 2, use the jax-stable-stack image containing JAX 0.5.2:
 ```
-BASE_IMAGE=us-docker.pkg.dev/cloud-tpu-images/jax-stable-stack/tpu:jax0.4.37-rev1
+BASE_IMAGE=us-docker.pkg.dev/cloud-tpu-images/jax-stable-stack/tpu:jax0.5.2-rev1
 bash docker_build_dependency_image.sh DEVICE=tpu MODE=stable_stack BASEIMAGE=${BASE_IMAGE}
 ```
 
@@ -38,13 +38,13 @@ python3 benchmarks/benchmark_runner.py xpk \
 
 From your workload logs, you should start seeing step time logs like the following:
 ```
-completed step: 7, seconds: 6.051, TFLOP/s/device: 451.236, Tokens/s/device: 8123.462, total_weights: 393216, loss: 6.765
+completed step: 6, seconds: 6.320, TFLOP/s/device: 431.981, Tokens/s/device: 7776.813, total_weights: 393216, loss: 7.378
 ```
 If you would like to run on multiple slices of v6e-8, you may modify the `--num_slices` flag.
 
 ### Workload Details
 
-For reference, here are the `llama3_1_8b_8192_no_collective_matmul` workload details as found in `MaxText@tpu-recipes-v0.1.0`:
+For reference, here are the `mistral_7b` workload details as found in `MaxText@tpu-recipes-v0.1.0`:
 
 ```
   MaxTextModel(
@@ -90,4 +90,4 @@ For reference, here are the `llama3_1_8b_8192_no_collective_matmul` workload det
   )
 ```
 
-This equivalent workload code can be found in the [maxtext_trillium_model_configs.py](https://github.com/AI-Hypercomputer/maxtext/blob/tpu-recipes-v0.1.0/benchmarks/maxtext_trillium_model_configs.py#L1189-L1232) file within the MaxText repository.
+This equivalent workload code can be found in the [maxtext_trillium_model_configs.py](https://github.com/AI-Hypercomputer/maxtext/blob/tpu-recipes-v0.1.0/benchmarks/maxtext_trillium_model_configs.py#L1217-L1260) file within the MaxText repository.

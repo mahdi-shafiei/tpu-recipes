@@ -13,9 +13,9 @@ In step 1, use the MaxText [tpu-recipes-v0.1.0](https://github.com/AI-Hypercompu
 git checkout tpu-recipes-v0.1.0
 ```
 
-In step 2, use the jax-stable-stack image containing JAX 0.4.37:
+In step 2, use the jax-stable-stack image containing JAX 0.5.2:
 ```
-BASE_IMAGE=us-docker.pkg.dev/cloud-tpu-images/jax-stable-stack/tpu:jax0.4.37-rev1
+BASE_IMAGE=us-docker.pkg.dev/cloud-tpu-images/jax-stable-stack/tpu:jax0.5.2-rev1
 bash docker_build_dependency_image.sh DEVICE=tpu MODE=stable_stack BASEIMAGE=${BASE_IMAGE}
 ```
 
@@ -38,7 +38,7 @@ python3 benchmarks/benchmark_runner.py xpk \
 
 From your workload logs, you should start seeing step time logs like the following:
 ```
-completed step: 7, seconds: 3.416, TFLOP/s/device: 416.601, Tokens/s/device: 7193.579, total_weights: 196608, loss: 6.634
+completed step: 6, seconds: 3.517, TFLOP/s/device: 404.636, Tokens/s/device: 6986.975, total_weights: 196608, loss: 7.507
 ```
 If you would like to run on multiple slices of v6e-8, you may modify the `--num_slices` flag.
 
