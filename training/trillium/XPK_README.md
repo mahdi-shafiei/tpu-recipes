@@ -7,10 +7,18 @@ gcloud config set project $PROJECT
 gcloud config set compute/zone $ZONE
 ```
 
-2. Clone XPK repo.
+2. Install XPK by following the [prerequisites](https://github.com/AI-Hypercomputer/xpk?tab=readme-ov-file#prerequisites) and [installation](https://github.com/AI-Hypercomputer/xpk?tab=readme-ov-file#installation) 
+instructions. Also ensure you have the proper [GCP permissions](https://github.com/AI-Hypercomputer/xpk?tab=readme-ov-file#installation).
+
+* In order to run the tpu-recipes as-is, run the `git clone` command from your home directory:
 ```
 git clone https://github.com/google/xpk.git
-cd xpk
+```
+
+3. Run the rest of these commands from the cloned XPK directory:
+
+```
+cd xpk # Should be equivalent to cd ~/xpk
 ```
 
 ## GKE Cluster Creation 
