@@ -7,7 +7,7 @@ Please follow this [link](https://github.com/AI-Hypercomputer/tpu-recipes/blob/m
 
 ### Starting workload
 
-Launch the XPK workload:
+Launch the XPK workload, example to run on 1 slice of v6e-256:
 ```
 python3 ~/xpk/xpk.py workload create \
     --cluster=${CLUSTER_NAME} \
@@ -18,6 +18,11 @@ python3 ~/xpk/xpk.py workload create \
     --num-slices=1 \
     --docker-image=us-docker.pkg.dev/cloud-tpu-images/jax-stable-stack/tpu:jax0.4.37-rev1 \
     --workload=${WORKLOAD_NAME}
+```
+
+To run on more than 1 slice, modify the `--num_slices` and `--config` flags to use the target number of slices and the corresponding yaml config file e.g
+```
+--num_slices=2 --config=configs/2x_v6e_256.yaml 
 ```
 
 From your workload logs, you should start seeing benchmark logs:
@@ -31,4 +36,4 @@ Results will be printed out and also stored at `/tmp/microbenchmarks/collectives
 gsutil cp -r /tmp/microbenchmarks/collectives gs://<your-gcs-bucket>
 ```
 
-Check out the other scripts for running on more than 1 slice.
+
