@@ -1,6 +1,6 @@
-# Serve Llama-3.1-8B (or any other model) with vLLM on TPU VMs.
+# Serve Qwen2.5-32B (or any other model) with vLLM on TPU VMs.
 
-In this guide, we show how to serve Llama-3.1-8B ([deepseek-ai/DeepSeek-R1-Distill-Llama-8B](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-8B)). You can host [any other supported model](https://docs.vllm.ai/en/latest/models/supported_models.html) based on your needs.
+In this guide, we show how to serve Qwen2.5-32B ([Qwen/Qwen2.5-32B](https://huggingface.co/Qwen/Qwen2.5-32B)). You can host [any other supported model](https://docs.vllm.ai/en/latest/models/supported_models.html) based on your needs.
 
 ## Step 0: Install `gcloud cli`
 
@@ -10,21 +10,23 @@ To install `gcloud cli` please follow this guide: [Install the gcloud CLI](https
 
 Once it is installed, you can login to GCP from your terminal with this command: `gcloud auth login`.
 
-## Step 1: Create a v6e TPU instance
+## Step 1: Create a v5e TPU instance
 
-We create a single VM with 1 trillium chip as it's enought to serve an 8B parameter model - if you need larger instances, you can set a different value for `--topology` such as `2x2`, `2x4`, etc.
+We create a single VM with 8 v5e chips - if you need a different number of chips, you can set a different value for `--topology` such as `1x1`, `2x4`, etc.
 
-To learn more about topologies: [v6e VM Types](https://cloud.google.com/tpu/docs/v6e#vm-types).
+<small>*1- Why 8 chips for an 32B model? we need at least 64GB of HBM for the weights (assuming the model is served in BF16 => 32B * 2 bytes = 64B bytes or 64 GB) and some room in HBM for KV Cache - given that each v5e has [16GB](https://cloud.google.com/tpu/docs/v5e) of HBM per chip, we provision 8 chips (128 GB of HBM in total) to accommodate for both the weights and the KV Cache*</small>
+
+To learn more about topologies: [v5e VM Types](https://cloud.google.com/tpu/docs/v5e#vm-types).
 
 ```bash
 export TPU_NAME=your-tpu-name
 export ZONE=your-tpu-zone 
 export PROJECT=your-tpu-project
 
-# this command creates a tpu vm with 1 Trillium (v6e) chips - adjust it to suit your needs
+# this command creates a tpu vm with 8 v5e chips - adjust it to suit your needs
 gcloud alpha compute tpus tpu-vm create $TPU_NAME \
-    --type v6e --topology 1x1 \
-    --project $PROJECT --zone $ZONE --version v2-alpha-tpuv6e
+    --type v5litepod --topology 2x4 \
+    --project $PROJECT --zone $ZONE --version v2-alpha-tpuv5-lite
 ```
 
 ## Step 2: ssh to the instance
@@ -60,11 +62,11 @@ Now we serve the vllm server. Make sure you keep this terminal open for the enti
 
 ```bash
 export MAX_MODEL_LEN=4096
-export TP=1 # number of chips
+export TP=8 # number of chips
 # export RATIO=0.8
 # export PREFIX_LEN=0
 
-VLLM_USE_V1=1 vllm serve deepseek-ai/DeepSeek-R1-Distill-Llama-8B --seed 42 --disable-log-requests --gpu-memory-utilization 0.95 --max-num-batched-tokens 8192 --max-num-seqs 128 --tensor-parallel-size $TP --max-model-len $MAX_MODEL_LEN
+VLLM_USE_V1=1 vllm serve Qwen/Qwen2.5-32B --seed 42 --disable-log-requests --gpu-memory-utilization 0.95 --max-num-batched-tokens 512 --max-num-seqs 512 --tensor-parallel-size $TP --max-model-len $MAX_MODEL_LEN
 ```
 
 It takes a few minutes depending on the model size to prepare the server - once you see the below snippet in the logs, it means that the server is ready to serve requests or run benchmarks:
@@ -104,7 +106,7 @@ Let's submit a test request to the server. This helps us to see if the server is
 curl http://localhost:8000/v1/completions \
     -H "Content-Type: application/json" \
     -d '{
-        "model": "deepseek-ai/DeepSeek-R1-Distill-Llama-8B",
+        "model": "Qwen/Qwen2.5-32B",
         "prompt": "I love the mornings, because ",
         "max_tokens": 200,
         "temperature": 0
@@ -132,7 +134,7 @@ cd /workspace/vllm
 
 python benchmarks/benchmark_serving.py \
     --backend vllm \
-    --model "deepseek-ai/DeepSeek-R1-Distill-Llama-8B"  \
+    --model "Qwen/Qwen2.5-32B"  \
     --dataset-name random \
     --num-prompts 1000 \
     --random-input-len=$MAX_INPUT_LEN \
@@ -146,17 +148,17 @@ The snippet below is what you’d expect to see - the numbers vary based on the 
 
 ```bash
 ============ Serving Benchmark Result ============
-Successful requests:                     xxxxxxx
-Benchmark duration (s):                  xxxxxxx
-Total input tokens:                      xxxxxxx
-Total generated tokens:                  xxxxxxx
-Request throughput (req/s):              xxxxxxx
-Output token throughput (tok/s):         xxxxxxx
-Total Token throughput (tok/s):          xxxxxxx
+Successful requests:                     xxxxxxx 
+Benchmark duration (s):                  xxxxxxx 
+Total input tokens:                      xxxxxxx 
+Total generated tokens:                  xxxxxxx 
+Request throughput (req/s):              xxxxxxx 
+Output token throughput (tok/s):         xxxxxxx 
+Total Token throughput (tok/s):          xxxxxxx 
 ---------------Time to First Token----------------
-Mean TTFT (ms):                          xxxxxxx
-Median TTFT (ms):                        xxxxxxx
-P99 TTFT (ms):                           xxxxxxx
+Mean TTFT (ms):                          xxxxxxx  
+Median TTFT (ms):                        xxxxxxx  
+P99 TTFT (ms):                           xxxxxxx  
 -----Time per Output Token (excl. 1st token)------
 Mean TPOT (ms):                          xxxxxxx   
 Median TPOT (ms):                        xxxxxxx   

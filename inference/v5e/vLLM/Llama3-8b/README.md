@@ -10,21 +10,23 @@ To install `gcloud cli` please follow this guide: [Install the gcloud CLI](https
 
 Once it is installed, you can login to GCP from your terminal with this command: `gcloud auth login`.
 
-## Step 1: Create a v6e TPU instance
+## Step 1: Create a v5e TPU instance
 
-We create a single VM with 1 trillium chip as it's enought to serve an 8B parameter model - if you need larger instances, you can set a different value for `--topology` such as `2x2`, `2x4`, etc.
+We create a single VM with 4 v5e chips - to serve an 8b model <sup>1</sup> if you need larger instances, you can set a different value for `--topology` such as `2x2`, `2x4`, etc.
 
-To learn more about topologies: [v6e VM Types](https://cloud.google.com/tpu/docs/v6e#vm-types).
+<small>*1- Why 4 chips for an 8B model? we need at least 16GB of HBM for the weights (assuming the model is served in BF16 => 8B * 2 bytes = 16B bytes or 16 GB) and some room in HBM for KV Cache - given that each v5e has [16GB](https://cloud.google.com/tpu/docs/v5e) of HBM per chip, we provision 4 chips to accommodate for both the weights and the KV Cache*</small>
+
+To learn more about topologies: [v5e VM Types](https://cloud.google.com/tpu/docs/v5e#vm-types).
 
 ```bash
 export TPU_NAME=your-tpu-name
 export ZONE=your-tpu-zone 
 export PROJECT=your-tpu-project
 
-# this command creates a tpu vm with 1 Trillium (v6e) chips - adjust it to suit your needs
+# this command creates a tpu vm with 4 v5e chips - adjust it to suit your needs
 gcloud alpha compute tpus tpu-vm create $TPU_NAME \
-    --type v6e --topology 1x1 \
-    --project $PROJECT --zone $ZONE --version v2-alpha-tpuv6e
+    --type v5litepod --topology 2x2 \
+    --project $PROJECT --zone $ZONE --version v2-alpha-tpuv5-lite
 ```
 
 ## Step 2: ssh to the instance
@@ -60,7 +62,7 @@ Now we serve the vllm server. Make sure you keep this terminal open for the enti
 
 ```bash
 export MAX_MODEL_LEN=4096
-export TP=1 # number of chips
+export TP=4 # number of chips
 # export RATIO=0.8
 # export PREFIX_LEN=0
 
