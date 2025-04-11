@@ -10,7 +10,7 @@ Please follow this [link](https://github.com/AI-Hypercomputer/tpu-recipes/blob/m
 
 In step 1, use the MaxText [tpu-recipes-v0.1.0](https://github.com/AI-Hypercomputer/maxtext/releases/tag/tpu-recipes-v0.1.0) tag to run this recipe:
 ```
-git checkout tpu-recipes-v0.1.0
+git checkout tpu-recipes-v0.1.1
 ```
 
 In step 2, use the jax-stable-stack image containing JAX 0.5.2:
@@ -25,7 +25,7 @@ bash docker_build_dependency_image.sh DEVICE=tpu MODE=stable_stack BASEIMAGE=${B
 
 From the MaxText root directory, start your Llama3.1-70B workload
 ```
-python3 benchmarks/benchmark_runner.py xpk \
+python3 -m benchmarks.benchmark_runner xpk \
     --project=$PROJECT \
     --zone=$ZONE \
     --device_type=v6e-256 \
