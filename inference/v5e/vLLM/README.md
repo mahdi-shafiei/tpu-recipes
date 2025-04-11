@@ -10,4 +10,3 @@ These models were chosen for demonstration purposes only. You can serve any mode
 If you are looking for GKE-based deployment, please refer to this documentation: [Serve an LLM using TPU Trillium on GKE with vLLM](https://cloud.google.com/kubernetes-engine/docs/tutorials/serve-vllm-tpu)
 
 To serve vLLM on v6e TPUs, please refer to this page: [Serve vLLM on Trillium TPUs (v6e)](../../trillium/vLLM/README.md)
-

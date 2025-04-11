@@ -118,7 +118,7 @@ curl http://localhost:8000/v1/completions \
 You might need to install datasets as it's not available in the base vllm image.
 
 ```bash
-pip install datasets datasets
+pip install datasets
 ```
 
 ## Step 10:  Run the benchmarking
