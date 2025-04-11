@@ -1,5 +1,5 @@
 # Run this command from the MaxText root directory using the setup described in the README.
-python3 benchmarks/benchmark_runner.py xpk \
+python3 -m benchmarks.benchmark_runner xpk \
     --project=$PROJECT \
     --zone=$ZONE \
     --device_type=v6e-8 \
