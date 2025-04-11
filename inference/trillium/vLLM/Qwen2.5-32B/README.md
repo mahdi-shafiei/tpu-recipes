@@ -12,7 +12,7 @@ Once it is installed, you can login to GCP from your terminal with this command:
 
 ## Step 1: Create a v6e TPU instance
 
-We create a single VM with 4 trillium chips - if you need a different number of chips, you can set a different value for `--topology` such as `1x1`, `4x2`, etc.
+We create a single VM with 4 trillium chips - if you need a different number of chips, you can set a different value for `--topology` such as `1x1`, `2x4`, etc.
 
 To learn more about topologies: [v6e VM Types](https://cloud.google.com/tpu/docs/v6e#vm-types).
 
@@ -21,7 +21,7 @@ export TPU_NAME=your-tpu-name
 export ZONE=your-tpu-zone 
 export PROJECT=your-tpu-project
 
-# this command creates a tpu vm with 1 Trillium (v6e) chips - adjust it to suit your needs
+# this command creates a tpu vm with 4 Trillium (v6e) chips - adjust it to suit your needs
 gcloud alpha compute tpus tpu-vm create $TPU_NAME \
     --type v6e --topology 2x2 \
     --project $PROJECT --zone $ZONE --version v2-alpha-tpuv6e
@@ -59,7 +59,7 @@ export HF_TOKEN=<your HF token>
 Now we serve the vllm server. Make sure you keep this terminal open for the entire duration of this experiment.
 
 ```bash
-export MAX_MODEL_LEN=2048
+export MAX_MODEL_LEN=4096
 export TP=4 # number of chips
 # export RATIO=0.8
 # export PREFIX_LEN=0
@@ -116,7 +116,7 @@ curl http://localhost:8000/v1/completions \
 You might need to install datasets as it's not available in the base vllm image.
 
 ```bash
-pip install datasets datasets
+pip install datasets
 ```
 
 ## Step 10:  Run the benchmarking
