@@ -1,4 +1,8 @@
 # Prep for Maxtext workloads on GKE
+
+> **_NOTE:_** We recommend running these instructions and kicking off your recipe 
+workloads from a TPU VM.
+
 1. Clone [Maxtext](https://github.com/google/maxtext) repo and move to its directory
 ```shell
 git clone https://github.com/google/maxtext.git

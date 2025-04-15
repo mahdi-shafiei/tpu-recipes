@@ -1,4 +1,8 @@
 ## Initialization
+
+> **_NOTE:_** We recommend running these instructions and kicking off your recipe 
+workloads from a TPU VM.
+
 1. Run the following commands to initialize the project and zone.
 ```shell
 export PROJECT=#<your_project_id>
