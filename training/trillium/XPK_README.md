@@ -1,6 +1,6 @@
 ## Initialization
 1. Run the following commands to initialize the project and zone.
-```
+```shell
 export PROJECT=#<your_project_id>
 export ZONE=#<zone>
 gcloud config set project $PROJECT
@@ -11,19 +11,19 @@ gcloud config set compute/zone $ZONE
 instructions. Also ensure you have the proper [GCP permissions](https://github.com/AI-Hypercomputer/xpk?tab=readme-ov-file#installation).
 
 * In order to run the tpu-recipes as-is, run the `git clone` command from your home directory:
-```
+```shell
 git clone https://github.com/google/xpk.git
 ```
 
 3. Run the rest of these commands from the cloned XPK directory:
 
-```
+```shell
 cd xpk # Should be equivalent to cd ~/xpk
 ```
 
 ## GKE Cluster Creation 
 1. Specify your TPU GKE cluster configs.
-```
+```shell
 export CLUSTER_NAME=v6e-demo #<your_cluster_name>
 export NETWORK_NAME=${CLUSTER_NAME}-only-mtu9k
 export NETWORK_FW_NAME=${NETWORK_NAME}-only-fw
@@ -35,7 +35,7 @@ export REGION=<compute_region>
 ```
 
 2. Create the network and firewall for this cluster if it doesn’t exist yet.
-```
+```shell
 NETWORK_NAME_1=${CLUSTER_NAME}-mtu9k-1-${ZONE}
 NETWORK_FW_NAME_1=${NETWORK_NAME_1}-fw-1-${ZONE}
 
@@ -67,7 +67,7 @@ gcloud compute routers nats create "${NAT_CONFIG}" \
 ```
 
 3. Create GKE cluster with TPU node-pools
-```
+```shell
 export CLUSTER_ARGUMENTS="--enable-dataplane-v2 --enable-ip-alias --enable-multi-networking --network=${NETWORK_NAME_1} --subnetwork=${NETWORK_NAME_1}"
 
 export NODE_POOL_ARGUMENTS="--additional-node-network network=${NETWORK_NAME_2},subnetwork=${SUBNET_NAME_2}"
@@ -80,12 +80,12 @@ python3 xpk.py cluster create --cluster $CLUSTER_NAME --cluster-cpu-machine-type
   * You should be able to see your GKE cluster similar to this once it is created successfully:![image](https://github.com/user-attachments/assets/60743411-5ee5-4391-bb0e-7ffba4d91c1d)
 
 4. Performance Daemonset 
-```
+```shell
 kubectl apply -f https://raw.githubusercontent.com/GoogleCloudPlatform/ai-on-gke/9ff340f07f70be0130454f9e7238551587242b75/scripts/network-setup/v6e-network-optimization.yaml
 ```
 
 5. Test your GKE cluster to make sure it is usable
-```
+```shell
 python3 xpk.py workload create \
 --cluster ${CLUSTER_NAME} \
 --workload hello-world-test \
@@ -96,17 +96,15 @@ python3 xpk.py workload create \
 * You should be able to to see results like this: ![image](https://github.com/user-attachments/assets/c33010a6-e109-411e-8fb5-afb4edb3fa72)
 
 6. You can also check your workload status with the following command:
-  ```
-python3 xpk.py workload list \
---cluster ${CLUSTER_NAME}
-  ```
+```shell
+python3 xpk.py workload list --cluster ${CLUSTER_NAME}
+```
 7. For more information about XPK, please refer to this [link](https://github.com/google/xpk).
 
 ## GKE Cluster Deletion
 You can use the following command to delete GKE cluster:
-```
+```shell
 export CLUSTER_NAME=v6e-demo #<your_cluster_name>
 
-python3 xpk.py cluster delete \
---cluster $CLUSTER_NAME
+python3 xpk.py cluster delete --cluster $CLUSTER_NAME
 ```
