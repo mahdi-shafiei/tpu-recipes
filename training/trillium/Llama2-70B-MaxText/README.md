@@ -8,9 +8,9 @@ Please follow this [link](https://github.com/AI-Hypercomputer/tpu-recipes/blob/m
 ### Install MaxText and Build Docker Image
 Please follow this [link](https://github.com/AI-Hypercomputer/tpu-recipes/blob/main/training/trillium/MAXTEXT_README.md) to install maxtext and build the docker image. The following variables should be set:
 
-In step 1, use the MaxText [tpu-recipes-v0.1.1](https://github.com/AI-Hypercomputer/maxtext/releases/tag/tpu-recipes-v0.1.1) tag to run this recipe:
+In step 1, use the MaxText [tpu-recipes-v0.1.2(https://github.com/AI-Hypercomputer/maxtext/releases/tag/tpu-recipes-v0.1.2) tag to run this recipe:
 ```
-git checkout tpu-recipes-v0.1.1
+git checkout tpu-recipes-v0.1.2
 ```
 
 In step 2, use the jax-stable-stack image containing JAX 0.5.2:
@@ -43,7 +43,7 @@ completed step: 16, seconds: 9.052, TFLOP/s/device: 402.274, Tokens/s/device: 90
 
 ### Workload Details
 
-For reference, here are the `llama2_70b_4096_sc` workload details as found in `MaxText@tpu-recipes-v0.1.0`:
+For reference, here are the `llama2_70b_4096_sc` workload details as found in `MaxText@tpu-recipes-v0.1.2`:
 
 ```
 MaxTextModel(
@@ -76,4 +76,4 @@ MaxTextModel(
 )
 ```
 
-This equivalent workload code can be found in the [maxtext_trillium_model_configs.py](https://github.com/AI-Hypercomputer/maxtext/blob/tpu-recipes-v0.1.0/benchmarks/maxtext_trillium_model_configs.py#L410) file within the MaxText repository.
+This equivalent workload code can be found in the [maxtext_trillium_model_configs.py](https://github.com/AI-Hypercomputer/maxtext/blob/tpu-recipes-v0.1.2/benchmarks/maxtext_trillium_model_configs.py) file within the MaxText repository.
