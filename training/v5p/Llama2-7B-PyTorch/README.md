@@ -5,7 +5,7 @@ This user guide provides a concise overview of the essential steps required to r
 
 ## Environment Setup
 
-The following setup assumes to run the training job with llama2-7b on GCE TPUs using the docker image from this registery (`us-central1-docker.pkg.dev/tpu-pytorch/docker/reproducibility/llama2@sha256:3fda2382a36c8a7c39f8838f9a1abde3a161fd47283b052d04fa090e3ee210f5`), the docker image uses the pytorch and torch_xla nightly build from 09/16/2024 and installed with all the package dependency needed to run the model training. Please follow corresponding TPU generation's user guide to setup the GCE TPUs first. All the command below should run from your own machine (not the TPU host you created).
+The following setup assumes to run the training job with llama2-7b on GCE TPUs using the docker image from this registery (`us-central1-docker.pkg.dev/deeplearning-images/reproducibility/pytorch-xla/llama2:7b`), the docker image uses the pytorch and torch_xla nightly build from 09/16/2024 and installed with all the package dependency needed to run the model training. Please follow corresponding TPU generation's user guide to setup the GCE TPUs first. All the command below should run from your own machine (not the TPU host you created).
 
 ### Setup Environment of Your TPUs
 Please replace all your-* with your TPUs' information.
@@ -29,7 +29,7 @@ HF_TOKEN=hf_***
 3. Edit `host.sh` to add the docker image URL if default docker image is not accessible to you.
 ```bash
 # docker image URL to use for the training
-DOCKER_IMAGE=us-central1-docker.pkg.dev/tpu-pytorch/docker/reproducibility/llama2@sha256:3fda2382a36c8a7c39f8838f9a1abde3a161fd47283b052d04fa090e3ee210f5
+DOCKER_IMAGE=us-central1-docker.pkg.dev/deeplearning-images/reproducibility/pytorch-xla/llama2:7b
 ```
 4. Run the training script:
 ```bash
