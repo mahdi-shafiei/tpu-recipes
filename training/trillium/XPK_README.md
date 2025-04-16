@@ -1,7 +1,7 @@
 ## Initialization
 
 > **_NOTE:_** We recommend running these instructions and kicking off your recipe 
-workloads from a TPU VM.
+workloads from a VM in GCP using Python 3.10.
 
 1. Run the following commands to initialize the project and zone.
 ```shell
@@ -14,8 +14,10 @@ gcloud config set compute/zone $ZONE
 2. Install XPK by following the [prerequisites](https://github.com/AI-Hypercomputer/xpk?tab=readme-ov-file#prerequisites) and [installation](https://github.com/AI-Hypercomputer/xpk?tab=readme-ov-file#installation) 
 instructions. Also ensure you have the proper [GCP permissions](https://github.com/AI-Hypercomputer/xpk?tab=readme-ov-file#installation).
 
-* In order to run the tpu-recipes as-is, run the `git clone` command from your home directory:
+* In order to run the tpu-recipes as-is, run the `git clone` command from your home (~/) directory:
 ```shell
+# tpu-recipes requiring XPK will look for it in the home directory
+cd ~/
 git clone https://github.com/google/xpk.git
 ```
 
@@ -24,6 +26,11 @@ git clone https://github.com/google/xpk.git
 ```shell
 cd xpk # Should be equivalent to cd ~/xpk
 ```
+
+> **_NOTE:_** If you use a virtual environment in the 
+[XPK Installation](https://github.com/AI-Hypercomputer/xpk?tab=readme-ov-file#installation)
+steps, you must use the same one to run the steps in the [MAXTEXT_README](MAXTEXT_README.md)
+as well as your relevant tpu-recipe workloads.
 
 ## GKE Cluster Creation 
 1. Specify your TPU GKE cluster configs.
