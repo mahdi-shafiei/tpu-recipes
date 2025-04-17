@@ -1,14 +1,14 @@
-# Prep for Maxtext workloads on GKE
+# Prep for MaxText workloads on GKE
 
 > **_NOTE:_** We recommend running these instructions and kicking off your recipe 
-workloads from a TPU VM.
+workloads from a VM in GCP using Python 3.10.
 
-1. Clone [Maxtext](https://github.com/google/maxtext) repo and move to its directory
+1. Clone [MaxText](https://github.com/google/maxtext) repo and move to its directory
 ```shell
 git clone https://github.com/google/maxtext.git
 cd maxtext
 # Checkout either the commit id or MaxText tag. 
-# Example: `git checkout tpu-recipes-v0.1.1`
+# Example: `git checkout tpu-recipes-v0.1.2`
 git checkout ${MAXTEXT_COMMIT_ID_OR_TAG}
 ```
 
@@ -18,7 +18,7 @@ bash setup.sh
 ```
 
 Optional: Use a virtual environment to setup and run your workloads. This can help with errors
-like `This environment is externally managed`.
+like `This environment is externally managed`:
 ```shell
 ## One time step of creating the venv
 VENV_DIR=~/venvp3
@@ -28,6 +28,10 @@ source $VENV_DIR/bin/activate
 ## Install dependencies
 bash setup.sh
 ```
+
+> **_NOTE:_** If you use a virtual environment, you must use the same one when running the 
+[XPK Installation](https://github.com/AI-Hypercomputer/xpk?tab=readme-ov-file#installation) 
+steps linked in the [XPK_README](XPK_README.md) as well as your relevant tpu-recipe workloads.
 
 3. Run the following commands to build the docker image
 ```shell
