@@ -36,5 +36,5 @@ as well as your relevant tpu-recipe workloads.
 Trillium GKE clusters can be [created](https://cloud.google.com/tpu/docs/v6e-intro#create_an_xpk_cluster_with_multi-nic_support) and 
 [deleted](https://cloud.google.com/tpu/docs/v6e-intro#delete_xpk_cluster) by following the public GCP documentation.
 
-> Note: in order to run the training and microbenchmarks tpu-recipes, you should not need to run sections outside of 
+> **_NOTE:_** in order to run the training and microbenchmarks tpu-recipes, you should not need to run sections outside of
 `Create an XPK cluster with multi-NIC support` when creating your cluster. You can skip the following sections like `Framework setup`.
