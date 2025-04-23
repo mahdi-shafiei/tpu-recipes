@@ -78,3 +78,17 @@ Failing command: /home/bvandermoon/venvp3/bin/python3
 
 -bash: /home/bvandermoon/venvp3/bin/activate: No such file or directory
 ```
+
+2. If you see an error like the following while building your Docker image, there could be a pip versioning
+conflict in your cache.
+
+```
+ERROR: THESE PACKAGES DO NOT MATCH THE HASHES FROM THE REQUIREMENTS FILE. If you have updated the
+package versions, please update the hashes. Otherwise, examine the package contents carefully;
+someone may have tampered with them.
+     unknown package:
+         Expected sha256 b3e54983cd51875855da7c68ec05c05cf8bb08df361b1d5b69e05e40b0c9bd62
+              Got        f3b7ea1da59dc4f182437cebc7ef37b847d55c7ebfbc3ba286302f1c89ff5929
+```
+
+Try deleting your pip cache file: `rm ~/.cache/pip -rf`. Then retry the Docker build
