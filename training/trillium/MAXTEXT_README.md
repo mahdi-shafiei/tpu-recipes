@@ -58,3 +58,23 @@ export ZONE=#<your_compute_zone>
 export CLUSTER_NAME=v6e-demo #<your_cluster_name>
 export OUTPUT_DIR=gs://v6e-demo/ #<your_GCS_folder_for_results>
 ```
+
+# FAQ
+
+1. If you see the following error when creating your virtual environment in step 2, install the 
+required dependency using the output's provided command. You may need to run the command with `sudo`. This 
+example is for Python3.10.
+```
+The virtual environment was not created successfully because ensurepip is not
+available.  On Debian/Ubuntu systems, you need to install the python3-venv
+package using the following command.
+
+    apt install python3.10-venv
+
+You may need to use sudo with that command.  After installing the python3-venv
+package, recreate your virtual environment.
+
+Failing command: /home/bvandermoon/venvp3/bin/python3
+
+-bash: /home/bvandermoon/venvp3/bin/activate: No such file or directory
+```
