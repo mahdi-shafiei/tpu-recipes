@@ -1,0 +1,47 @@
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+taskGroups:
+  - taskSpec:
+      runnables:
+        - container:
+            imageUri: ${ARTIFACT_REGISTRY}/${JETSTREAM_MAXTEXT_IMAGE}:${JETSTREAM_MAXTEXT_VERSION}
+            entrypoint: "/bin/sh"
+            commands:
+              - "-c"
+              - mkdir -p /mnt/disks/persist/models/ && echo "Downloading model ${HF_MODEL_NAME}" && huggingface-cli download ${HF_MODEL_NAME} --local-dir /mnt/disks/persist/models/fp8 && cd /maxtext && echo "Converting checkpoint from fp8 to bf16" && python3 -m MaxText.deepseek_fp8_to_bf16 --input-fp8-hf-path /mnt/disks/persist/models/fp8 --output-bf16-hf-path /mnt/disks/persist/models/bf16 --cache-file-num 16 && echo "Converting checkpoint from bf16 to maxtext/unscanned format" && JAX_PLATFORMS='' python3 -m MaxText.convert_deepseek_unscanned_ckpt --base_model_path /mnt/disks/persist/models/bf16 --maxtext_model_path ${GCS_CKPT_PATH_UNSCANNED} --model_size $MODEL_NAME --use-zarr3 false --use-ocdbt false && echo "Completed checkpoint conversion. Unscanned checkpoint saved at ${GCS_CKPT_PATH_UNSCANNED}"
+      volumes:
+        - deviceName: persist
+          mountPath: /mnt/disks/persist
+          mountOptions: rw,async
+      computeResource:
+        cpuMilli: 160000
+        memoryMib: 3936256
+# Define the allocation policy for provisioning VMs
+allocationPolicy:
+  location:
+    allowedLocations: ["regions/${CLUSTER_CKPT_NODE_REGION}"]
+  instances:
+    - policy:
+        machineType: ${CLUSTER_CKPT_NODE_MACHINE_TYPE}
+        bootDisk:
+          type: pd-ssd
+          sizeGb: 500
+        disks:
+          newDisk:
+            sizeGb: 3000
+            type: pd-ssd
+          deviceName: persist
+logsPolicy:
+  destination: CLOUD_LOGGING
