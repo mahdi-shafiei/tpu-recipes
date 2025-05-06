@@ -2,9 +2,9 @@
 
 This recipe outlines the steps to benchmark [DeepSeek-V3](https://huggingface.co/deepseek-ai/DeepSeek-V3) or [DeepSeek-R1](https://huggingface.co/deepseek-ai/DeepSeek-R1) 671B model using [JetStream](https://github.com/AI-Hypercomputer/JetStream/tree/main) \+ [MaxText](https://github.com/AI-Hypercomputer/maxtext) inference engine deployed on a GKE cluster with multi-host [TPU v6e slices](https://cloud.google.com/kubernetes-engine) utilizing [Pathways on Cloud](https://cloud.google.com/ai-hypercomputer/docs/workloads/pathways-on-cloud/pathways-intro).
 
-* [Jetstream](https://github.com/AI-Hypercomputer/JetStream) is a throughput and memory-optimized engine for LLM inference on XLA devices, primarily TPUs written in JAX.  
-* [MaxText](https://github.com/AI-Hypercomputer/maxtext) is an open-source LLM project by Google, written in JAX and designed to be highly performant and scalable, running efficiently on Google Cloud TPUs and GPUs.   
-* [Pathways](https://cloud.google.com/ai-hypercomputer/docs/workloads/pathways-on-cloud/pathways-intro) is a system that simplifies large-scale ML computations by enabling a single JAX client to orchestrate workloads across multiple large TPU slices, spanning thousands of TPU chips.  
+* [Jetstream](https://github.com/AI-Hypercomputer/JetStream) is a throughput and memory-optimized engine for LLM inference on XLA devices, primarily TPUs written in JAX.
+* [MaxText](https://github.com/AI-Hypercomputer/maxtext) is an open-source LLM project by Google, written in JAX and designed to be highly performant and scalable, running efficiently on Google Cloud TPUs and GPUs.
+* [Pathways](https://cloud.google.com/ai-hypercomputer/docs/workloads/pathways-on-cloud/pathways-intro) is a system that simplifies large-scale ML computations by enabling a single JAX client to orchestrate workloads across multiple large TPU slices, spanning thousands of TPU chips.
 * [TPUs](https://cloud.google.com/tpu/docs/v6e) are Google's custom-developed accelerator for ML and AI models built using frameworks such as TensorFlow, PyTorch, and JAX. TPU v6e is Cloud TPU's latest generation AI accelerator.
 
 ## Outline
@@ -12,22 +12,22 @@ This recipe outlines the steps to benchmark [DeepSeek-V3](https://huggingface.co
 1. [Ensure prerequisites are met.](#prerequisites)
 2. [Setup development environment.](#setup-your-local-environment)
 3. [Provision a GKE Cluster with TPU v6e and CPU nodepools](#create-gke-cluster-with-tpu-v6e-nodepool-using-xpk)
-4. [Configure service account for access](#configure-a-service-account-for-access)  
-5. [Create container image with dependencies](#build-jetstreammaxtext-container-image-to-deploy-the-workload)  
-6. [Checkpoint conversion](#checkpoint-conversion)  
+4. [Configure service account for access](#configure-a-service-account-for-access)
+5. [Create container image with dependencies](#build-jetstreammaxtext-container-image-to-deploy-the-workload)
+6. [Checkpoint conversion](#checkpoint-conversion)
    - Download model weights from HuggingFace
    - Convert Hugging Face checkpoint from FP8 to BF16
    - Convert Hugging Face BF16 checkpoint to MaxText compatible checkpoint
-7. [Deploy JetStream and Pathways](#deploy-jetstream-and-pathways)  
+7. [Deploy JetStream and Pathways](#deploy-jetstream-and-pathways)
 8. [Run MMLU benchmark](#run-mmlu-benchmark)
 
 ## Prerequisites
 
-1. Verify that your project has enough quota in your region of choice for:  
-   * A Cloud TPU slice, for example v6e-64 (`TPUS_PER_TPU_FAMILY`)  
+1. Verify that your project has enough quota in your region of choice for:
+   * A Cloud TPU slice, for example v6e-64 (`TPUS_PER_TPU_FAMILY`)
    * Compute Engine API quota for M1 machine configuration for 160 chips (`M1_CPUS`)
-2. Required IAM Permissions  
-   Make sure that you have the following roles on the project:   
+2. Required IAM Permissions
+   Make sure that you have the following roles on the project:
    * Compute Admin (`roles/compute.admin`)
    * Kubernetes Engine Admin (`roles/container.admin`)
    * Storage Admin (`roles/storage.admin`)
@@ -38,21 +38,21 @@ This recipe outlines the steps to benchmark [DeepSeek-V3](https://huggingface.co
    * Project IAM Admin (`roles/resourcemanager.projectIamAdmin`)
 3. Access to Pathways Container Images.
    * You run a Pathways cluster on GKE in one of the [Pathways container images](https://cloud.google.com/ai-hypercomputer/docs/workloads/pathways-on-cloud/pathways-intro#pathways-components).
-4. Access to DeepSeek models on Hugging Face.  
-   To access the [DeepSeek-V3](https://huggingface.co/deepseek-ai/DeepSeek-V3) or [DeepSeek-R1](https://huggingface.co/deepseek-ai/DeepSeek-R1) model through Hugging Face, you'll need a Hugging Face token. Follow these steps to generate a new token if you don't have one already:  
-   * Create a [Hugging Face account](https://huggingface.co/), if you don't already have one.  
-   * Click Your **Profile \> Settings \> Access Tokens**.  
-   * Select **New Token**.  
-   * Specify a Name and a Role of at least Read.  
-   * Select **Generate a token**.  
+4. Access to DeepSeek models on Hugging Face.
+   To access the [DeepSeek-V3](https://huggingface.co/deepseek-ai/DeepSeek-V3) or [DeepSeek-R1](https://huggingface.co/deepseek-ai/DeepSeek-R1) model through Hugging Face, you'll need a Hugging Face token. Follow these steps to generate a new token if you don't have one already:
+   * Create a [Hugging Face account](https://huggingface.co/), if you don't already have one.
+   * Click Your **Profile \> Settings \> Access Tokens**.
+   * Select **New Token**.
+   * Specify a Name and a Role of at least Read.
+   * Select **Generate a token**.
    * Copy the generated token to your clipboard.
 
 ## Setup your local environment
 
 We recommend running this recipe from [Cloud Shell](https://console.cloud.google.com/?cloudshell=true) or a client workstation with the following pre-installed:
 
-* [Google Cloud SDK](https://cloud.google.com/sdk/docs/install)  
-* [Helm](https://helm.sh/docs/intro/install/)  
+* [Google Cloud SDK](https://cloud.google.com/sdk/docs/install)
+* [Helm](https://helm.sh/docs/intro/install/)
 * [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/)
 
 Install [xpk](https://github.com/AI-Hypercomputer/xpk) toolkit that lets you create pre-configured GKE clusters that support Pathways-based workloads
@@ -76,7 +76,7 @@ export RECIPE_ROOT=$REPO_ROOT/inference/trillium/JetStream-Maxtext/DeepSeek-R1-6
 
 ### Configure environment settings
 
-Define the following environment variables with values appropriate to your workload: 
+Define the following environment variables with values appropriate to your workload:
 
 ``` bash
 # Required variables to be set
@@ -108,24 +108,24 @@ export GCS_CKPT_PATH_UNSCANNED=gs://${GCS_BUCKET}/models/${MODEL_NAME}/unscanned
 
 Following are required variables that must be set:
 
-- `<PROJECT_ID>`: your Google Cloud project ID  
-- `<REGION>`: the region where you want to run Cloud Build  
-- `<CLUSTER_NAME>`: the name of your GKE cluster  
-- `<CLUSTER_ZONE>`: the zone where your cluster is located  
-- `<GCS_BUCKET>`: the name of your Cloud Storage bucket. Do not include the gs:// prefix  
+- `<PROJECT_ID>`: your Google Cloud project ID
+- `<REGION>`: the region where you want to run Cloud Build
+- `<CLUSTER_NAME>`: the name of your GKE cluster
+- `<CLUSTER_ZONE>`: the zone where your cluster is located
+- `<GCS_BUCKET>`: the name of your Cloud Storage bucket. Do not include the gs:// prefix
 - `<TPU_RESERVATION>`: the name of the TPU reservation
 
 Following are required variables with default values already set:
 
-- `TPU_TYPE`: TPU accelerator type supported by TPU v6e. Refer to the [supported list](https://cloud.google.com/tpu/docs/v6e#configurations).   
-- `NUM_SLICES`: The number of slices to use  
-- `CLUSTER_CPU_MACHINE_TYPE`: The CPU nodepool machine type  
-- `CLUSTER_CKPT_NODEPOOL_NAME`: The name of CPU nodepool used for checkpoint conversion  
-- `CLUSTER_CKPT_NODE_MACHINE_TYPE`: The machine type of CPU nodepool used for checkpoint conversion  
-- `CLUSTER_CKPT_NODE_DISK_SIZE`: The disk size of CPU nodepool used for checkpoint conversion. For this recipe, a minimum of 3TB disk size is suggested.  
-- CLUSTER\_CKPT\_NUM\_NODES  
-- `ARTIFACT_REGISTRY`: the full name of your Artifact Registry in the following format: *LOCATION*\-docker.pkg.dev/*PROJECT\_ID*/*REPOSITORY*  
-- `JETSTREAM_MAXTEXT_IMAGE`: the name of the JetStream MaxText image  
+- `TPU_TYPE`: TPU accelerator type supported by TPU v6e. Refer to the [supported list](https://cloud.google.com/tpu/docs/v6e#configurations).
+- `NUM_SLICES`: The number of slices to use
+- `CLUSTER_CPU_MACHINE_TYPE`: The CPU nodepool machine type
+- `CLUSTER_CKPT_NODEPOOL_NAME`: The name of CPU nodepool used for checkpoint conversion
+- `CLUSTER_CKPT_NODE_MACHINE_TYPE`: The machine type of CPU nodepool used for checkpoint conversion
+- `CLUSTER_CKPT_NODE_DISK_SIZE`: The disk size of CPU nodepool used for checkpoint conversion. For this recipe, a minimum of 3TB disk size is suggested.
+- CLUSTER\_CKPT\_NUM\_NODES
+- `ARTIFACT_REGISTRY`: the full name of your Artifact Registry in the following format: *LOCATION*\-docker.pkg.dev/*PROJECT\_ID*/*REPOSITORY*
+- `JETSTREAM_MAXTEXT_IMAGE`: the name of the JetStream MaxText image
 - `JETSTREAM_MAXTEXT_VERSION`: the version of the JetStream MaxText image
 
 Set the default project:
@@ -207,7 +207,7 @@ gcloud storage buckets create gs://$GCS_BUCKET --location=$REGION
 
 ## Configure a service account for access
 
-Configure a Kubernetes service account to act as an IAM service account. 
+Configure a Kubernetes service account to act as an IAM service account.
 
 * Create an IAM service account for your application:
 
@@ -227,7 +227,7 @@ gcloud projects add-iam-policy-binding ${PROJECT_ID} \
   --role roles/storage.insightsCollectorService
 ```
 
-* Annotate the Kubernetes service account with the email address of the IAM service account. 
+* Annotate the Kubernetes service account with the email address of the IAM service account.
 
 ``` bash
 kubectl annotate serviceaccount default \
@@ -286,7 +286,7 @@ This step requires an `m1-ultramem-160` (memory-optimized) machine with 3TB of s
 The following job performs following steps:
 - Downloads DeepSeek V3 or DeepSeek R1 (defined by `HF_MODEL_NAME`) weights from HuggingFace.
 - Convert Hugging Face checkpoint weights from FP8 to BF16.
-- Convert BF16 weights  to MaxText compatible format (unscanned checkpoint) for efficient serving. 
+- Convert BF16 weights  to MaxText compatible format (unscanned checkpoint) for efficient serving.
 
 Submit Cloud Batch job. This step can take >2 hours.
 
@@ -304,10 +304,20 @@ You can monitor the progress of the job on Cloud Console from the [job list page
 
 ## Deploy JetStream and Pathways
 
-Get cluster credentials and connect to the GKE cluster 
+Get cluster credentials and connect to the GKE cluster
 
 ``` bash
 gcloud container clusters get-credentials $CLUSTER_NAME --region $REGION --project $PROJECT_ID
+```
+
+### Create Kubernetes Secret with a Hugging Face token to enable the job to download the model checkpoints.
+
+```bash
+export HF_TOKEN=<YOUR_HUGGINGFACE_TOKEN>
+
+kubectl create secret generic hf-secret \
+--from-literal=hf_api_token=${HF_TOKEN} \
+--dry-run=client -o yaml | kubectl apply -f -
 ```
 
 ### Deploy LeaderWorkerSet (LWS) API
@@ -335,7 +345,7 @@ lws-controller-manager-efgh   2/2     Running   0           12d
 
 ### Deploy the workload manifest
 
-This step starts the JetStream inference engine and Pathways.  
+This step starts the JetStream inference engine and Pathways.
 
 ![](./pathways.png)
 
@@ -405,7 +415,7 @@ kubectl exec -it jetstream-pathways-0 -c jax-tpu -- /bin/bash
 
 ``` bash
 curl --request POST --header "Content-type: application/json" -s localhost:8000/generate --data '{
-    "prompt": "What are the top 5 programming languages",                                                       
+    "prompt": "What are the top 5 programming languages",
     "max_tokens": 200
 }'
 ```
