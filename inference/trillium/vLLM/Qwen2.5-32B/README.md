@@ -1,6 +1,6 @@
-# Serve Qwen2.5-32B (or any other model) with vLLM on TPU VMs.
+# Serve Qwen2.5-32B with vLLM on TPU VMs.
 
-In this guide, we show how to serve Qwen2.5-32B ([Qwen/Qwen2.5-32B](https://huggingface.co/Qwen/Qwen2.5-32B)). You can host [any other supported model](https://docs.vllm.ai/en/latest/models/supported_models.html) based on your needs.
+In this guide, we show how to serve Qwen2.5-32B ([Qwen/Qwen2.5-32B](https://huggingface.co/Qwen/Qwen2.5-32B)).
 
 ## Step 0: Install `gcloud cli`
 
