@@ -1,19 +1,19 @@
 # Instructions for training Llama3.1-70B-MaxText on TPU trillium (v6e-256)
 
 ## XPK setup
-Please follow this [link](https://github.com/AI-Hypercomputer/tpu-recipes/blob/main/training/trillium/XPK_README.md) to create your GKE cluster with XPK
+Please follow the [XPK_README](https://github.com/AI-Hypercomputer/tpu-recipes/blob/main/training/trillium/XPK_README.md) to create your GKE cluster with XPK
 
 ## Prep for Maxtext
 
 ### Install MaxText and Build Docker Image
-Please follow this [link](https://github.com/AI-Hypercomputer/tpu-recipes/blob/main/training/trillium/MAXTEXT_README.md) to install maxtext and build the docker image. The following variables should be set:
+Please follow the [MAXTEXT_README](https://github.com/AI-Hypercomputer/tpu-recipes/blob/main/training/trillium/MAXTEXT_README.md) to install maxtext and build the docker image. The following variables should be set:
 
-In step 1, use the MaxText [tpu-recipes-v0.1.0](https://github.com/AI-Hypercomputer/maxtext/releases/tag/tpu-recipes-v0.1.0) tag to run this recipe:
+In step 1, use the MaxText [tpu-recipes-v0.1.2](https://github.com/AI-Hypercomputer/maxtext/releases/tag/tpu-recipes-v0.1.2) tag to run this recipe:
 ```
-git checkout tpu-recipes-v0.1.0
+git checkout tpu-recipes-v0.1.2
 ```
 
-In step 2, use the jax-stable-stack image containing JAX 0.5.2:
+In step 3, use the jax-stable-stack image containing JAX 0.5.2:
 ```
 BASE_IMAGE=us-docker.pkg.dev/cloud-tpu-images/jax-stable-stack/tpu:jax0.5.2-rev1
 bash docker_build_dependency_image.sh DEVICE=tpu MODE=stable_stack BASEIMAGE=${BASE_IMAGE}
@@ -25,7 +25,7 @@ bash docker_build_dependency_image.sh DEVICE=tpu MODE=stable_stack BASEIMAGE=${B
 
 From the MaxText root directory, start your Llama3.1-70B workload
 ```
-python3 benchmarks/benchmark_runner.py xpk \
+python3 -m benchmarks.benchmark_runner xpk \
     --project=$PROJECT \
     --zone=$ZONE \
     --device_type=v6e-256 \
@@ -44,14 +44,14 @@ If you would like to run on multiple slices of v6e-256, you may modify the `--nu
 
 ### Workload Details
 
-For reference, here are the `llama3_1_70b_8192` workload details as found in `MaxText@tpu-recipes-v0.1.0`:
+For reference, here are the `llama3_1_70b_8192` workload details as found in `MaxText@tpu-recipes-v0.1.2`:
 
 ```
-  MaxTextModel(
+MaxTextModel(
     model_name="llama3_1-70b-8192",
     model_type="llama3.1-70b",
     tuning_params={
-        "per_device_batch_size": 4,
+        "per_device_batch_size": 5,
         "ici_fsdp_parallelism": -1,
         "remat_policy": "custom",
         "decoder_layer_input": "offload",
@@ -87,4 +87,4 @@ For reference, here are the `llama3_1_70b_8192` workload details as found in `Ma
   )
 ```
 
-This equivalent workload code can be found in the [maxtext_trillium_model_configs.py](https://github.com/AI-Hypercomputer/maxtext/blob/243b25e480f7550a0c389fa95cd3adcc716fe0df/benchmarks/maxtext_trillium_model_configs.py#L932-L972) file within the MaxText repository.
+This equivalent workload code can be found in the [maxtext_trillium_model_configs.py](https://github.com/AI-Hypercomputer/maxtext/blob/tpu-recipes-v0.1.2/benchmarks/maxtext_trillium_model_configs.py) file within the MaxText repository.
