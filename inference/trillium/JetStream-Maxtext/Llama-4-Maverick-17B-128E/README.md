@@ -182,7 +182,7 @@ python3 ~/xpk/xpk.py cluster create \
   --custom-nodepool-arguments="${NODE_POOL_ARGUMENTS}"
 ```
 
-You will also need to create a CPU Nodepool to do the checkpoint conversion like this 
+You will also need to Create a CPU nodepool with a high memory machine to convert the checkpoint
 
 ```bash
   gcloud container node-pools create cpunodepool \
