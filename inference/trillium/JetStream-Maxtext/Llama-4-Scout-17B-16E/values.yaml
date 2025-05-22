@@ -55,4 +55,5 @@ maxtext_config:
   max_prefill_predict_length: 1024
   force_unroll: false
   max_target_length: 2048
+  attention: dot_product
   hf_access_token: $HF_TOKEN

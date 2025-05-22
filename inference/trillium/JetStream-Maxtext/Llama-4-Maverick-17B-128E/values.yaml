@@ -62,4 +62,5 @@ maxtext_config:
   enable_model_warmup: true
   checkpoint_storage_use_ocdbt: false
   checkpoint_storage_use_zarr3: false
+  attention: dot_product
   hf_access_token: $HF_TOKEN

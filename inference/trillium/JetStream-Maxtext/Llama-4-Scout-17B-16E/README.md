@@ -279,9 +279,6 @@ The recipe uses the helm chart to run the above steps.
 4. To run MMLU, run the following command:
 
   ```bash
-    # Copy the test dataset
-    gsutil cp /path/to/JetStream/benchmarks/mmlu_test_dataset/* gs://${GCS_BUCKET}/mmlu/data/test/
-
     # Run the benchmark
     kubectl exec -it deployment/$USER-serving-llama4-model-serving -- /bin/bash -c "JAX_PLATFORMS=tpu python3 /JetStream/benchmarks/benchmark_serving.py \
     --tokenizer meta-llama/Llama-4-Scout-17B-16E \

@@ -93,8 +93,8 @@ spec:
               --base-model-path ${BASE_MODEL_PATH} \
               --maxtext-model-path ${CHECKPOINT_TPU_UNSCANNED} \
               --model-size ${MODEL_SIZE} \
-              --huggingface-checkpoint
-
+              --huggingface-checkpoint True 
+            
             gsutil -m cp -r ${CHECKPOINT_TPU_UNSCANNED} /gcs/{{ .Values.model.name }}/output/unscanned_ckpt/checkpoints/
 
             echo "Conversion Job Complete. Unscanned checkpoints should be at ${CHECKPOINT_TPU_UNSCANNED}"
