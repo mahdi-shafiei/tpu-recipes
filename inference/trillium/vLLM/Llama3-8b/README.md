@@ -1,6 +1,6 @@
-# Serve Llama-3.1-8B (or any other model) with vLLM on TPU VMs.
+# Serve Llama-3.1-8B with vLLM on TPU VMs.
 
-In this guide, we show how to serve Llama-3.1-8B ([deepseek-ai/DeepSeek-R1-Distill-Llama-8B](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-8B)). You can host [any other supported model](https://docs.vllm.ai/en/latest/models/supported_models.html) based on your needs.
+In this guide, we show how to serve Llama-3.1-8B ([deepseek-ai/DeepSeek-R1-Distill-Llama-8B](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-8B)).
 
 ## Step 0: Install `gcloud cli`
 
