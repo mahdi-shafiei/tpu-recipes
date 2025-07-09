@@ -104,6 +104,7 @@ export HF_MODEL_NAME="deepseek-ai/DeepSeek-R1"
 export MODEL_NAME=deepseek3-671b
 export GCS_CKPT_PATH_BF16=gs://${GCS_BUCKET}/models/${MODEL_NAME}/bf16
 export GCS_CKPT_PATH_UNSCANNED=gs://${GCS_BUCKET}/models/${MODEL_NAME}/unscanned
+export GCS_CKPT_PATH_QUANTIZED=gs://${GCS_BUCKET}/models/${MODEL_NAME}/quantized
 ```
 
 Following are required variables that must be set:
@@ -276,7 +277,7 @@ This command outputs the `BUILD ID`. You can monitor the build progress by strea
 
 ``` bash
 BUILD_ID=<BUILD_ID>
-gcloud beta builds log $BUILD_ID --region=$REGION
+gcloud beta builds log $BUILD_ID --region=$REGION --stream
 ```
 
 ## Checkpoint conversion
@@ -286,7 +287,8 @@ This step requires an `m1-ultramem-160` (memory-optimized) machine with 3TB of s
 The following job performs following steps:
 - Downloads DeepSeek V3 or DeepSeek R1 (defined by `HF_MODEL_NAME`) weights from HuggingFace.
 - Convert Hugging Face checkpoint weights from FP8 to BF16.
-- Convert BF16 weights  to MaxText compatible format (unscanned checkpoint) for efficient serving.
+- Convert BF16 weights to MaxText compatible format (unscanned checkpoint) for efficient serving.
+- Quantize BF16 checkpoint to INT8 format.
 
 Submit Cloud Batch job. This step can take >2 hours.
 
