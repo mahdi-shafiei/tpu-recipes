@@ -102,6 +102,7 @@ export JETSTREAM_MAXTEXT_IMAGE=jetstream-maxtext
 export JETSTREAM_MAXTEXT_VERSION=latest
 export HF_MODEL_NAME="deepseek-ai/DeepSeek-R1"
 export MODEL_NAME=deepseek3-671b
+export LOCAL_CKPT_BASE_PATH=/mnt/disks/persist
 export GCS_CKPT_PATH_BF16=gs://${GCS_BUCKET}/models/${MODEL_NAME}/bf16
 export GCS_CKPT_PATH_UNSCANNED=gs://${GCS_BUCKET}/models/${MODEL_NAME}/unscanned
 export GCS_CKPT_PATH_QUANTIZED=gs://${GCS_BUCKET}/models/${MODEL_NAME}/quantized
