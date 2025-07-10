@@ -42,7 +42,7 @@ taskGroups:
             entrypoint: "/bin/sh"
             commands:
               - "-c"
-              - echo "Quantizing checkpoint to INT8 format" && cd /maxtext && JAX_PLATFORMS='' python3 -m MaxText.layerwise_quantization MaxText/configs/base.yml tokenizer_path=${HF_MODEL_NAME} load_parameters_path=${GCS_CKPT_PATH_UNSCANNED}/0/items model_name=${MODEL_NAME} ici_fsdp_parallelism=1 ici_autoregressive_parallelism=1 ici_tensor_parallelism=-1 scan_layers=false weight_dtype=bfloat16 per_device_batch_size=1 attention=dot_product quantization=int8 async_checkpointing=false enable_single_controller=true tokenizer_type=huggingface megablox=false sparse_matmul=false save_quantized_params_path=${GCS_CKPT_PATH_QUANTIZED} && echo "Completed quantizing checkpoint. Quantized checkpoint saved at ${GCS_CKPT_PATH_QUANTIZED}"
+              - echo "Quantizing checkpoint to INT8 format" && cd /maxtext && JAX_PLATFORMS='' python3 -m MaxText.layerwise_quantization MaxText/configs/base.yml tokenizer_path=${HF_MODEL_NAME} load_parameters_path=${GCS_CKPT_PATH_UNSCANNED}/0/items model_name=${MODEL_NAME} ici_fsdp_parallelism=1 ici_autoregressive_parallelism=1 ici_tensor_parallelism=-1 scan_layers=false weight_dtype=bfloat16 per_device_batch_size=1 attention=dot_product quantization=int8 async_checkpointing=false enable_single_controller=true tokenizer_type=huggingface megablox=false sparse_matmul=false save_quantized_params_path=${GCS_CKPT_PATH_QUANTIZED} checkpoint_storage_use_ocdbt=False checkpoint_storage_use_zarr3=false && echo "Completed quantizing checkpoint. Quantized checkpoint saved at ${GCS_CKPT_PATH_QUANTIZED}"
       volumes:
         - deviceName: persist
           mountPath: /mnt/disks/persist
