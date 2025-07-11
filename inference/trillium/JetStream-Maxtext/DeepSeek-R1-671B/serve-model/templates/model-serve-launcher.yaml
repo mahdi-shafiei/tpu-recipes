@@ -56,6 +56,9 @@ spec:
           {{- with (index .Values.volumes.gcsMounts 0) }}
           - --gcs_scratch_location=gs://{{ .bucketName }}/tmp
           {{- end }}
+          {{- range .Values.xla_flags }}
+          - {{ . }}
+          {{- end }}
           imagePullPolicy: Always
           ports:
           - containerPort: 38681
