@@ -37,7 +37,7 @@ The following setup runs the training job with Mixtral 8x7B on GCE TPUs using th
 1. git clone and navigate to this README repo and run training script:
 ```bash
 git clone --depth 1 https://github.com/AI-Hypercomputer/tpu-recipes.git
-cd training/v5p/Mixtral-8x7B-PyTorch
+cd training/archive/v5p/Mixtral-8x7B-PyTorch
 ```
 2. Edit `env.sh` to add the hugging face token and/or setup the training parameters.
 ```bash
