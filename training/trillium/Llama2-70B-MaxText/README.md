@@ -8,7 +8,7 @@ Please follow the [XPK_README](https://github.com/AI-Hypercomputer/tpu-recipes/b
 ### Install MaxText and Build Docker Image
 Please follow the [MAXTEXT_README](https://github.com/AI-Hypercomputer/tpu-recipes/blob/main/training/trillium/MAXTEXT_README.md) to install maxtext and build the docker image. The following variables should be set:
 
-In step 1, use the MaxText [tpu-recipes-v0.1.2(https://github.com/AI-Hypercomputer/maxtext/releases/tag/tpu-recipes-v0.1.2) tag to run this recipe:
+In step 1, use the MaxText [tpu-recipes-v0.1.2](https://github.com/AI-Hypercomputer/maxtext/releases/tag/tpu-recipes-v0.1.2) tag to run this recipe:
 ```
 git checkout tpu-recipes-v0.1.2
 ```
