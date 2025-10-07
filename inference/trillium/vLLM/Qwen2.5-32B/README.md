@@ -1,4 +1,4 @@
-# Serve Qwen2.5-32B with vLLM on TPU VMs.
+# Serve Qwen2.5-32B with vLLM on TPU VMs
 
 In this guide, we show how to serve Qwen2.5-32B ([Qwen/Qwen2.5-32B](https://huggingface.co/Qwen/Qwen2.5-32B)).
 
@@ -34,6 +34,7 @@ gcloud compute tpus tpu-vm ssh $TPU_NAME --project $PROJECT --zone=$ZONE
 ```
 
 ## Step 3: Use the latest vllm docker image for TPU
+
 We use a pinned image but you can change it to `vllm/vllm-tpu:nightly` to get the latest TPU nightly image.
 
 ```bash
@@ -47,6 +48,7 @@ sudo docker run -t --rm --name $USER-vllm --privileged --net=host -v /dev/shm:/d
 ```
 
 ## Step 5: Set up env variables
+
 Export your hugging face token along with other environment variables inside the container.
 
 ```bash
@@ -96,7 +98,7 @@ gcloud compute tpus tpu-vm ssh $TPU_NAME --project $PROJECT --zone=$ZONE
 sudo docker exec -it $USER-vllm bash
 ```
 
-## Step 9: Test the server.
+## Step 9: Test the server
 
 Let's submit a test request to the server. This helps us to see if the server is launched properly and we can see legitimate response from the model.
 
@@ -167,4 +169,3 @@ Median ITL (ms):                         xxxxxxx
 P99 ITL (ms):                            xxxxxxx   
 ==================================================
 ```
-
