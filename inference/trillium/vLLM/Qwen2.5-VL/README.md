@@ -79,7 +79,7 @@ gcloud compute tpus tpu-vm ssh $TPU_NAME --project $PROJECT --zone=$ZONE
 export DOCKER_URI=vllm/vllm-tpu:nightly
 ```
 
-> **!!Important!!:** As of 10/07/2025, the `vllm/vllm-tpu:nightly` Docker image does not yet include the necessary `tpu_commons` updates to support multi-modal models like Qwen2.5-VL. The following instructions require installing [vllm-tpu](https://docs.vllm.ai/en/latest/getting_started/installation/google_tpu.html#set-up-using-python) and [tpu_commons](https://github.com/vllm-project/tpu_commons?tab=readme-ov-file) manually on the TPU VM and run directly from the source (user can also choose to build a local Docker image) instead of using Docker published images. For production environments, we recommend waiting for an official `vllm-tpu` Docker image release that includes this support.
+> **!!Important!!:** As of 10/07/2025, the `vllm/vllm-tpu:nightly` Docker image does not yet include the necessary `tpu_inference` updates to support multi-modal models like Qwen2.5-VL. The following instructions require installing [vllm-tpu](https://docs.vllm.ai/en/latest/getting_started/installation/google_tpu.html#set-up-using-python) and [tpu-inference](https://github.com/vllm-project/tpu-inference) manually on the TPU VM and run directly from the source (user can also choose to build a local Docker image) instead of using Docker published images. For production environments, we recommend waiting for an official `vllm-tpu` Docker image release that includes this support.
 
 ## Step 4: Run the docker container in the TPU instance
 
