@@ -35,10 +35,8 @@ gcloud compute tpus tpu-vm ssh $TPU_NAME --project $PROJECT --zone=$ZONE
 
 ## Step 3: Use the latest vllm docker image for TPU
 
-We use a pinned image but you can change it to `vllm/vllm-tpu:nightly` to get the latest TPU nightly image.
-
 ```bash
-export DOCKER_URI=vllm/vllm-tpu:nightly
+export DOCKER_URI=vllm/vllm-tpu:latest
 ```
 
 ## Step 4: Run the docker container in the TPU instance
