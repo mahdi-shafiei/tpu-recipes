@@ -12,8 +12,7 @@ gcloud config set project $PROJECT
 gcloud config set compute/zone $ZONE
 ```
 
-2. Install XPK by following the [prerequisites](https://github.com/AI-Hypercomputer/xpk?tab=readme-ov-file#prerequisites) and [installation](https://github.com/AI-Hypercomputer/xpk?tab=readme-ov-file#installation) 
-instructions. Also ensure you have the proper [GCP permissions](https://github.com/AI-Hypercomputer/xpk?tab=readme-ov-file#installation).
+2. Install the prerequisites for XPK by following the [instructions](https://github.com/AI-Hypercomputer/xpk?tab=readme-ov-file#prerequisites). Also ensure you have the proper [GCP permissions](https://github.com/AI-Hypercomputer/xpk?tab=readme-ov-file#installation).
 
 * In order to run the tpu-recipes as-is, run the `git clone` command from your home (~/) directory:
 ```shell
@@ -28,11 +27,6 @@ git clone https://github.com/google/xpk.git
 cd xpk # Should be equivalent to cd ~/xpk
 git checkout v0.14.3
 ```
-
-> **_NOTE:_** If you use a virtual environment in the 
-[XPK Installation](https://github.com/AI-Hypercomputer/xpk?tab=readme-ov-file#installation)
-steps, you must use the same one to run the steps in the [MAXTEXT_README](MAXTEXT_README.md)
-as well as your relevant tpu-recipe workloads.
 
 ## GKE Cluster Creation 
 Trillium GKE clusters can be [created](https://cloud.google.com/tpu/docs/v6e-intro#create_an_xpk_cluster_with_multi-nic_support) and 
