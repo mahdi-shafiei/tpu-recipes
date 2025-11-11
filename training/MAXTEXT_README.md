@@ -8,36 +8,34 @@ JAX < 0.7.0.
 ```shell
 git clone https://github.com/google/maxtext.git
 cd maxtext
-# Checkout either the commit id or MaxText tag. 
-# Example: `git checkout tpu-recipes-v0.1.2`
+
+# Specify MaxText commit id or tag you want to checkout
+# You can find MaxText tag here: https://github.com/AI-Hypercomputer/maxtext/tags
+MAXTEXT_COMMIT_ID_OR_TAG=#<commit_id_or_tag> e.g. tpu-recipes-v0.1.2
 git checkout ${MAXTEXT_COMMIT_ID_OR_TAG}
 ```
 
 2. Install MaxText dependencies
-```shell
-bash setup.sh
-```
 
-Optional: Use a virtual environment to setup and run your workloads. This can help with errors
-like `This environment is externally managed`:
+   **Optional:** Use a virtual environment to setup and run your workloads. This can help with errors like `This environment is externally managed`:
 ```shell
-## One time step of creating the venv
-VENV_DIR=~/venvp3
-python3 -m venv $VENV_DIR
-## Enter your venv.
-source $VENV_DIR/bin/activate
-## Install dependencies
-bash setup.sh
-```
+# Install uv, a fast Python package installer
+pip install uv
 
-> **_NOTE:_** If you use a virtual environment, you must use the same one when running the 
-[XPK Installation](https://github.com/AI-Hypercomputer/xpk?tab=readme-ov-file#installation) 
-steps linked in the [XPK_README](XPK_README.md) as well as your relevant tpu-recipe workloads.
+# Create a virtual environment
+VENV_NAME=#<your_virtual_env_name>
+uv venv --python 3.12 --seed $VENV_NAME
+source $VENV_NAME/bin/activate
+
+# Install MaxText and its dependencies
+uv pip install -e .[tpu] --resolution=lowest
+install_maxtext_github_deps
+```
 
 3. Run the following commands to build the docker image
 ```shell
 # Example BASE_IMAGE=us-docker.pkg.dev/cloud-tpu-images/jax-stable-stack/tpu:jax0.5.2-rev1
-BASE_IMAGE=<stable_stack_image_with_desired_jax_version>
+BASE_IMAGE=#<stable_stack_image_with_desired_jax_version>
 bash docker_build_dependency_image.sh DEVICE=tpu MODE=stable_stack BASEIMAGE=${BASE_IMAGE}
 ```
 
@@ -48,16 +46,16 @@ bash docker_upload_runner.sh CLOUD_IMAGE_NAME=${USER}_runner
 
 5. Create your GCS bucket
 ```shell
-OUTPUT_DIR=gs://v6e-demo-run #<your_GCS_folder_for_results>
-gcloud storage buckets create ${OUTPUT_DIR}  --project ${PROJECT}
+GCS_PROJECT=#<your_GCS_project>
+OUTPUT_DIR=#<your_GCS_bucket_for_results> e.g. gs://v6e-demo-run
+gcloud storage buckets create ${OUTPUT_DIR}  --project ${GCS_PROJECT}
 ```
 
 6. Specify your workload configs
 ```shell
 export PROJECT=#<your_compute_project>
 export ZONE=#<your_compute_zone>
-export CLUSTER_NAME=v6e-demo #<your_cluster_name>
-export OUTPUT_DIR=gs://v6e-demo/ #<your_GCS_folder_for_results>
+export CLUSTER_NAME=#<your_cluster_name>
 ```
 
 # FAQ
