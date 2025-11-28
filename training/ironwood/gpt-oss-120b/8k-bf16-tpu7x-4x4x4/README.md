@@ -78,27 +78,12 @@ Install XPK and necessary tools:
 # Ensure to log in to your gcloud
 
 # Install latest xpk
-pip install xpk==0.14.3
+pip install xpk==0.16.0
 
 # Install xpk pre-reqs kubectl-kueue and kjob (if you installed xpk via pip)
-
-# Download kueuectl - https://kueue.sigs.k8s.io/docs/reference/kubectl-kueue/installation/#installing-from-release-binaries
-curl -Lo ./kubectl-kueue https://github.com/kubernetes-sigs/kueue/releases/download/v0.12.2/kubectl-kueue-linux-amd64
-
-# Make binary executable
-chmod +x ./kubectl-kueue
-
-# Move to location in system PATH
-sudo mv ./kubectl-kueue /usr/local/bin/kubectl-kueue
-
-# Download kjob - https://github.com/kubernetes-sigs/kjob/blob/main/docs/installation.md
-curl -Lo ./kubectl-kjob https://github.com/kubernetes-sigs/kjob/releases/download/v0.1.0/kubectl-kjob-linux-amd64
-
-# Make binary executable
-chmod +x ./kubectl-kjob
-
-# Move to location in system PATH
-sudo mv ./kubectl-kjob /usr/local/bin/kubectl-kjob
+curl -LsSf https://raw.githubusercontent.com/AI-Hypercomputer/xpk/refs/tags/v0.16.0/tools/install-xpk.sh -o install-xpk.sh
+chmod +x install-xpk.sh
+./install-xpk.sh
 
 # Follow https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl#install_plugin to install gke-gcloud-auth-plugin
 ```
