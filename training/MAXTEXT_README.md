@@ -1,8 +1,6 @@
 # Prep for MaxText workloads on GKE
 
-> **_NOTE:_** We recommend running these instructions and kicking off your recipe 
-workloads from a VM in GCP using Python 3.12 for JAX >= 0.7.0, or Python 3.10 for
-JAX < 0.7.0.
+> **_NOTE:_** We recommend using Python 3.12 for MaxText workloads, as it is our primary supported version. Other Python versions may encounter compatibility issues.
 
 1. Clone [MaxText](https://github.com/google/maxtext) repo and move to its directory
 ```shell
