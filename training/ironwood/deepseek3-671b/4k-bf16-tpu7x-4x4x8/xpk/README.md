@@ -1,6 +1,6 @@
-# Pretrain llama3.1-70b workload on Ironwood GKE clusters with XPK
+# Pretrain deepseek3-671b workload on Ironwood GKE clusters with XPK
 
-This recipe outlines the steps for running a llama3.1-70b
+This recipe outlines the steps for running a deepseek3-671b
 [MaxText](https://github.com/AI-Hypercomputer/maxtext) pretraining workload on
 [Ironwood GKE clusters](https://cloud.google.com/kubernetes-engine) by using
 [XPK](https://github.com/AI-Hypercomputer/xpk).
@@ -9,9 +9,9 @@ This recipe outlines the steps for running a llama3.1-70b
 
 This workload is configured with the following details:
 
--   Sequence Length: 8192
+-   Sequence Length: 4096
 -   Precision: bf16
--   Chips: 64 (4x4x4 topology)
+-   Chips: 128 (4x4x8 topology)
 
 ## Prerequisites
 
@@ -78,7 +78,7 @@ Install XPK and necessary tools:
 # Ensure to log in to your gcloud
 
 # Install latest xpk
-pip install xpk==0.14.3
+pip install xpk==0.16.0
 
 # Install xpk pre-reqs kubectl-kueue and kjob (if you installed xpk via pip)
 
@@ -128,7 +128,7 @@ For this recipe, the following setup is used:
 
 ## Test environment
 
-This recipe is optimized for and tested with tpu7x-4x4x4.
+This recipe is optimized for and tested with tpu7x-4x4x8.
 
 -   **GKE cluster** To create your GKE cluster, use the XPK instructions.
     [XPK instructions](https://github.com/AI-Hypercomputer/xpk?tab=readme-ov-file#cluster-create).
@@ -155,7 +155,7 @@ across all commands and configurations.
     [Docker container image](#docker-container-image) section.
 -   `WORKLOAD_NAME`: A unique name for your workload. This is set in
     `run_recipe.sh` using the following command:
-    `export WORKLOAD_NAME="$(printf "%.26s" "${USER//_/-}-llama3-1-70b-8192-4x4x4")-$(date +%Y%m%d-%H%M)"`
+    `export WORKLOAD_NAME="$(printf "%.26s" "${USER//_/-}-deepseekv3-671b-4096-fsdp")-$(date +%Y%m%d-%H%M)"`
 -   `GKE_VERSION`: The GKE version, `1.34.0-gke.2201000` or later.
 -   `ACCELERATOR_TYPE`: The TPU type (e.g., `tpu7x-4x4x4`). See topologies
     [here](https://cloud.google.com/kubernetes-engine/docs/concepts/plan-tpus#configuration).
@@ -197,7 +197,7 @@ The following software versions are used:
 -   Jax version: 0.8.1
 -   Maxtext version: maxtext-tutorial-v1.3.0
 -   Python 3.11
--   XPK 0.14.3
+-   XPK 0.16.0
 
 Docker Image Building Command:
 
@@ -254,10 +254,10 @@ does this for you already):
 gcloud container clusters get-credentials ${CLUSTER_NAME} --project ${PROJECT_ID} --zone ${ZONE}
 ```
 
-### Run llama3.1-70b Pretraining Workload
+### Run deepseek3-671b Pretraining Workload
 
 The `run_recipe.sh` script contains all the necessary environment variables and
-configurations to launch the llama3.1-70b pretraining workload.
+configurations to launch the deepseek3-671b pretraining workload.
 
 To run the benchmark, first make the script executable and then run it:
 
@@ -288,6 +288,9 @@ You can customize the run by modifying `run_recipe.sh`:
 
 Note that any MaxText configurations not explicitly overridden in `MAXTEXT_ARGS`
 are expected to use the defaults within the specified `WORKLOAD_IMAGE`.
+
+## DeepSeek V3 128 chip BF16 Recipe
+The deepseekv3 model 128 chip config uses `fsdp_shard_on_exp=true`, which shards weights by expert dimension in a 256-way. These weights are then all-gathered before the ragged_dot kernel, and fully FSDP is then applied during kernel computation. Please note that `fsdp_shard_on_exp=true` only works if num of experts is divisible by ici_fsdp_parallelism.
 
 ## Monitor the job
 
