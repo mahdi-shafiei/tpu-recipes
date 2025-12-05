@@ -85,6 +85,7 @@ pip install xpk==0.16.0
 curl -LsSf https://raw.githubusercontent.com/AI-Hypercomputer/xpk/refs/tags/v0.16.0/tools/install-xpk.sh -o install-xpk.sh
 chmod +x install-xpk.sh
 ./install-xpk.sh
+rm install-xpk.sh
 
 # Follow https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl#install_plugin to install gke-gcloud-auth-plugin
 ```
