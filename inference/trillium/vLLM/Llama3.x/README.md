@@ -80,7 +80,7 @@ gcloud compute tpus tpu-vm ssh $TPU_NAME --project $PROJECT --zone=$ZONE
 ## Step 3: Use the latest vLLM Docker image for TPU
 
 ```bash
-export DOCKER_URI=vllm/vllm-tpu:nightly-20251129-28607fc-39e63de
+export DOCKER_URI=vllm/vllm-tpu:v0.12.0
 ```
 
 The docker image is pinned here for users to reproduce the [results below](#section-benchmarking).
