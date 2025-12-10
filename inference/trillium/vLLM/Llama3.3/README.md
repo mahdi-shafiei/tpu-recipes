@@ -93,7 +93,6 @@ To use the latest nightly built image that has more recent features/improvements
 sudo docker run -it --rm --name $USER-vllm --privileged --net=host \
     -v /dev/shm:/dev/shm \
     --shm-size 150gb \
-    -p 8000:8000 \
     --entrypoint /bin/bash ${DOCKER_URI}
 ```
 

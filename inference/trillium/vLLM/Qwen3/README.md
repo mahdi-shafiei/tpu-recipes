@@ -78,7 +78,6 @@ export DOCKER_URI=vllm/vllm-tpu:latest
 sudo docker run -it --rm --name $USER-vllm --privileged --net=host \
     -v /dev/shm:/dev/shm \
     --shm-size 100gb \
-    -p 8000:8000 \
     --entrypoint /bin/bash ${DOCKER_URI}
 ```
 
