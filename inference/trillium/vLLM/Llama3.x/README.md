@@ -1,17 +1,18 @@
-# Serve Llama3.3 with vLLM on TPU VMs
+# Serve Llama3.x with vLLM on TPU VMs
 
 In this guide, we show how to serve
+[Llama3.1-8B](https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct), 
 [Llama3.3-70B](https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct).
 
 > **Note:** Access to Llama models on Hugging Face requires accepting the Community License Agreement and awaiting approval before you can download and serve them.
 
-## Step 0: Install `gcloud cli`
+## Step 0: Install `gcloud CLI`
 
 You can reproduce this experiment from your dev environment
 (e.g. your laptop).
 You need to install `gcloud` locally to complete this tutorial.
 
-To install `gcloud cli` please follow this guide:
+To install `gcloud CLI` please follow this guide:
 [Install the gcloud CLI](https://cloud.google.com/sdk/docs/install#mac)
 
 Once it is installed, you can login to GCP from your terminal with this
@@ -19,7 +20,8 @@ command: `gcloud auth login`.
 
 ## Step 1: Create a v6e TPU instance
 
-We create a single VM. For Llama3.3-70B, at least 8 chips are required. If you need a different number of
+We create a single VM. For Llama3.1-8B, 1 chip is sufficient and for the 70B
+models, at least 8 chips are required. If you need a different number of
 chips, you can set a different value for `--topology` such as `1x1`,
 `2x4`, etc.
 
@@ -53,7 +55,7 @@ export ZONE=your-tpu-zone
 export PROJECT=your-tpu-project
 export QR_ID=your-queued-resource-id # e.g. my-qr-request
 
-# This command requests a v6e-8 (8 chips). Adjust accelerator-type for different sizes. For 1 chip, use --accelerator-type v6e-1.
+# This command requests a v6e-8 (8 chips). Adjust accelerator-type for different sizes. For 1 chip (Llama3.1-8B), use --accelerator-type v6e-1.
 gcloud alpha compute tpus queued-resources create $QR_ID \
     --node-id $TPU_NAME \
     --project $PROJECT --zone $ZONE \
@@ -69,25 +71,25 @@ gcloud alpha compute tpus queued-resources list --project $PROJECT --zone $ZONE
 
 Once the state is `ACTIVE`, your TPU VM is ready and you can proceed to the next steps.
 
-## Step 2: ssh to the instance
+## Step 2: SSH to the instance
 
 ```bash
 gcloud compute tpus tpu-vm ssh $TPU_NAME --project $PROJECT --zone=$ZONE
 ```
 
-## Step 3: Use the vllm docker image for TPU
+## Step 3: Use the latest vLLM Docker image for TPU
 
 ```bash
 export DOCKER_URI=vllm/vllm-tpu:nightly-20251129-28607fc-39e63de
 ```
 
-The docker image is pinged here for users to reproduce the [results below](#section-benchmarking).
+The docker image is pinned here for users to reproduce the [results below](#section-benchmarking).
 
 To use the latest stable version, set `DOCKER_URI=vllm/vllm-tpu:latest`.
 
 To use the latest nightly built image that has more recent features/improvements, set `DOCKER_URI=vllm/vllm-tpu:nightly`.
 
-## Step 4: Run the docker container in the TPU instance
+## Step 4: Run the Docker container in the TPU instance
 
 ```bash
 sudo docker run -it --rm --name $USER-vllm --privileged --net=host \
@@ -96,7 +98,7 @@ sudo docker run -it --rm --name $USER-vllm --privileged --net=host \
     --entrypoint /bin/bash ${DOCKER_URI}
 ```
 
-> **Note:** 150GB should be sufficient for the 70B model. For the 8B model allocate at least 17GB for the weights.
+> **Note:** 150GB should be sufficient for the 70B models. For the 8B model allocate at least 17GB for the weights.
 
 > **Note:** See [this guide](https://cloud.google.com/tpu/docs/attach-durable-block-storage) for attaching durable block storage to TPUs.
 
@@ -115,6 +117,8 @@ export HF_TOKEN=<your HF token>
 Now we start the vllm server.
 Make sure you keep this terminal open for the entire duration of this experiment.
 
+Here is the serving command for the 70B model:
+
 ```bash
 export MAX_MODEL_LEN=2048
 export TP=8 # number of chips
@@ -130,6 +134,14 @@ vllm serve meta-llama/Llama-3.3-70B-Instruct \
     --tensor-parallel-size $TP \
     --max-model-len $MAX_MODEL_LEN
 ```
+
+| Model | Input/Output Scenario | max-num-batched-tokens | max-num-seqs | tensor-parallel-size |
+|:--- | :--- | :--- | :--- | :--- |
+| Llama-3.x-70B-Instruct | Prefill Heavy | 2048 | 256 | 8 |
+| Llama-3.x-70B-Instruct | Decode Heavy/ Balanced | 512 | 256 | 8 |
+| Llama3.1-8B-Instruct | Prefill Heavy | 1024 | 128 | 1 |
+
+
 
 It takes a few minutes depending on the model size to prepare the server.
 Once you see the below snippet in the logs, it means that the server is ready
@@ -156,7 +168,7 @@ export PROJECT=your-tpu-project
 gcloud compute tpus tpu-vm ssh $TPU_NAME --project $PROJECT --zone=$ZONE
 ```
 
-## Step 8: access the running container
+## Step 8: Access the running container
 
 ```bash
 sudo docker exec -it $USER-vllm bash
@@ -177,7 +189,7 @@ curl http://localhost:8000/v1/completions \
     }'
 ```
 
-## Step 10: Preparing the test image
+## Step 10: Prepare the test image
 
 You will need to install datasets as it's not available in the base vllm
 image.
@@ -186,7 +198,7 @@ image.
 pip install datasets
 ```
 
-## <a id="section-benchmarking"></a>Step 11: Run the benchmarking
+## <a id="section-benchmarking"></a>Step 11: Run the benchmark
 
 Finally, we are ready to run the benchmark:
 
