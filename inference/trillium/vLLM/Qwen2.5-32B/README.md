@@ -42,7 +42,7 @@ export DOCKER_URI=vllm/vllm-tpu:latest
 ## Step 4: Run the docker container in the TPU instance
 
 ```bash
-sudo docker run -t --rm --name $USER-vllm --privileged --net=host -v /dev/shm:/dev/shm --shm-size 10gb -p 8000:8000 --entrypoint /bin/bash -it ${DOCKER_URI}
+sudo docker run -t --rm --name $USER-vllm --privileged --net=host -v /dev/shm:/dev/shm --shm-size 10gb --entrypoint /bin/bash -it ${DOCKER_URI}
 ```
 
 ## Step 5: Set up env variables
