@@ -135,11 +135,12 @@ vllm serve meta-llama/Llama-3.3-70B-Instruct \
     --max-model-len $MAX_MODEL_LEN
 ```
 
-| Model | Input/Output Scenario | max-num-batched-tokens | max-num-seqs |
-| :--- | :--- | :--- | :--- |
-| Llama-3.x-70B-Instruct | Prefill Heavy | 2048 | 256 |
-| Llama-3.x-70B-Instruct | Decode Heavy/ Balanced | 512 | 256 |
-| Llama3.1-8B-Instruct | Prefill Heavy | 1024 | 128 |
+| Model | Input/Output Scenario | max-num-batched-tokens | max-num-seqs | tensor-parallel-size |
+|:--- | :--- | :--- | :--- | :--- |
+| Llama-3.x-70B-Instruct | Prefill Heavy | 2048 | 256 | 8 |
+| Llama-3.x-70B-Instruct | Decode Heavy/ Balanced | 512 | 256 | 8 |
+| Llama3.1-8B-Instruct | Prefill Heavy | 1024 | 128 | 1 |
+
 
 
 It takes a few minutes depending on the model size to prepare the server.
