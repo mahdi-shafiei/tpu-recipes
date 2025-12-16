@@ -300,7 +300,6 @@ create a node pool with a single TPU v7 node in 2x2x1 configuration.
 1.  Interact with the model using curl (from your workstation/laptop)
 
     ```bash
-    # TODO: Update based on model
     curl http://localhost:8000/v1/completions -H "Content-Type: application/json" -d '{
         "model": "openai/gpt-oss-120b",
         "prompt": "San Francisco is a",
@@ -409,7 +408,18 @@ post:[ Scaling high-performance inference cost-effectively](https://cloud.google
 1.  Validate the Inference Gateway
 
     You must run these commands from a GCE VM inside the same VPC as your GKE
-    cluster, or a long running pod in the same cluster. Get the Internal Gateway IP
+    cluster, or a long running pod in the same cluster.
+
+    > **Tip:** If you don't have a VM or existing pod, you can create a temporary debug pod:
+    > ```bash
+    > kubectl run debug-pod --image=curlimages/curl --restart=Never -- /bin/sh -c "sleep 3600"
+    > ```
+    > Then execute commands from inside it:
+    > ```bash
+    > kubectl exec -it debug-pod -- /bin/sh
+    > ```
+
+    Get the Internal Gateway IP
     (this may take a few minutes to become available):
 
     ```bash
