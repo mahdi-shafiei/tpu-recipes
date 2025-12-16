@@ -212,7 +212,7 @@ create a node pool with a single TPU v7 node in 2x2x1 configuration.
             args:
             - --host=0.0.0.0
             - --port=8000
-            - --tensor-parallel-size=2
+            - --tensor-parallel-size=8
             - --max-model-len=9216
             - --download-dir=/data
             - --max-num-batched-tokens=16384
