@@ -13,7 +13,7 @@ source "${UV_VENV_PATH}/bin/activate"
 # Check if xpk is installed in the venv
 if ! pip show xpk &> /dev/null; then
     echo "xpk not found in the virtual environment. Please install it by running:"
-    echo "pip install xpk==0.16.0"
+    echo "pip install xpk==0.16.1"
     exit 1
 fi
 # --- End Environment Setup ---
