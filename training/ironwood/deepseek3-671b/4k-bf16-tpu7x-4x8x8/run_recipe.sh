@@ -13,7 +13,7 @@ source "${UV_VENV_PATH}/bin/activate"
 # Check if xpk is installed in the venv
 if ! pip show xpk &> /dev/null; then
     echo "xpk not found in the virtual environment. Please install it by running:"
-    echo "pip install xpk==0.16.0"
+    echo "pip install xpk==0.16.1"
     exit 1
 fi
 # --- End Environment Setup ---
@@ -58,8 +58,10 @@ XLA_FLAGS=" \
   --xla_tpu_scheduler_percent_shared_memory_limit=150 \
   --xla_tpu_enable_layer_scheduler_for_dependent_collectives=true \
   --xla_tpu_pcie_bandwidth_multiplier=0.03 \
-  --xla_tpu_enable_multi_compute_overlap_in_layer_scheduler=true \
-  --xla_tpu_enable_sparse_core_offload_queuing_in_lhs=true "
+  --xla_tpu_enable_multi_compute_overlap_in_layer_scheduler=false \
+  --xla_tpu_enable_sparse_core_offload_queuing_in_lhs=true \
+  --xla_tpu_enable_sparse_core_collective_offload_nd_reduce_scatter=true \
+  --xla_tpu_enable_3d_reduce_scatter_decomposer=false "
 
 # MaxText Workload Overrides
 MAXTEXT_ARGS="\
@@ -69,7 +71,7 @@ max_target_length=4096 \
 dcn_pipeline_parallelism=1 \
 dcn_data_parallelism=-1 \
 ici_pipeline_parallelism=1 \
-ici_fsdp_transpose_parallelism=1 \
+ici_fsdp_transpose_parallelism=2 \
 ici_fsdp_parallelism=-1 \
 allow_split_physical_axes=True \
 use_iota_embed=True \
@@ -78,10 +80,12 @@ decoder_layer_input=offload \
 opt_type=adamw \
 mu_dtype=bfloat16 \
 grad_dtype=bfloat16 \
+use_random_routing=True \
 megablox=True \
 sparse_matmul=True \
 use_custom_sort_vjp=True \
 fsdp_shard_on_exp=False \
+use_2d_fsdp_sharding=True \
 sa_use_fused_bwd_kernel=True \
 sa_block_q=2048 \
 sa_block_kv=2048 \
@@ -96,9 +100,6 @@ use_max_logit_estimate=-1 \
 cost_estimate_flops_fwd=5000000000000 \
 cost_estimate_flops_bwd=5000000000000 \
 float32_weight_sum=False \
-tile_batch_seq=512 \
-tile_embed_dim=1024 \
-tile_mlp_dim=2048 \
 use_tokamax_gmm=True \
 tokenizer_path=assets/tokenizer.mistral-v3 \
 dataset_type=synthetic \
