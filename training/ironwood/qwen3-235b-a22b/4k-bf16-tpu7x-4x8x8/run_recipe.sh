@@ -13,7 +13,7 @@ source "${UV_VENV_PATH}/bin/activate"
 # Check if xpk is installed in the venv
 if ! pip show xpk &> /dev/null; then
     echo "xpk not found in the virtual environment. Please install it by running:"
-    echo "pip install xpk==0.16.0"
+    echo "pip install xpk==0.16.1"
     exit 1
 fi
 # --- End Environment Setup ---
@@ -57,42 +57,40 @@ max_target_length=4096 \
 skip_jax_distributed_system=True \
 dtype=bfloat16 \
 weight_dtype=float32 \
+opt_type=adamw \
+steps=20 \
+profiler=xplane \
 skip_first_n_steps_for_profiler=5 \
 profile_periodically_period=10000 \
 async_checkpointing=False \
 enable_checkpointing=False \
-use_custom_sort_vjp=True \
-use_tokamax_gmm=True \
-use_random_routing=True \
 remat_policy=custom \
 decoder_layer_input=offload \
-opt_type=adamw \
-steps=20 \
+use_custom_sort_vjp=True \
+use_random_routing=True \
+fsdp_shard_on_exp=False \
 megablox=False \
 sparse_matmul=True \
-profiler=xplane \
-wi_tile_fwd_mlp_dim=2048 \
-wi_tile_dlhs_mlp_dim=2048 \
-wi_tile_drhs_mlp_dim=2048 \
-wo_tile_fwd_mlp_dim=2048 \
-wo_tile_dlhs_mlp_dim=2048 \
-wo_tile_drhs_mlp_dim=2048 \
+use_tokamax_gmm=True \
 use_tokamax_splash=True \
-sa_block_q=2048 \
-sa_block_kv=2048 \
-sa_block_kv_compute=1024 \
-sa_block_q_dkv=2048 \
-sa_block_q_dq=2048 \
-sa_block_kv_dkv=2048 \
-sa_block_kv_dq=2048 \
-sa_block_kv_dkv_compute=1024 \
 sa_use_fused_bwd_kernel=True \
 attention=flash \
+sa_block_q=1024 \
+sa_block_kv=1024 \
+sa_block_kv_compute=512 \
+sa_block_q_dkv=2048 \
+sa_block_kv_dkv=2048 \
+sa_block_kv_dkv_compute=1024 \
+sa_block_q_dq=1024 \
+sa_block_kv_dq=1024 \
+sa_q_layout=HEAD_DIM_MINOR \
+sa_k_layout=SEQ_MINOR \
+sa_v_layout=HEAD_DIM_MINOR \
 dcn_pipeline_parallelism=1 \
 dcn_data_parallelism=-1 \
 ici_pipeline_parallelism=1 \
 ici_fsdp_transpose_parallelism=1 \
-ici_fsdp_parallelism=512 \
+ici_fsdp_parallelism=-1 \
 dataset_type=synthetic \
 dataset_path=gs://max-datasets-rogue \
 base_output_directory=${BASE_OUTPUT_DIR} \
