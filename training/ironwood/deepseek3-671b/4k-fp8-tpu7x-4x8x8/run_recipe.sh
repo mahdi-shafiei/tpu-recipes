@@ -13,7 +13,7 @@ source "${UV_VENV_PATH}/bin/activate"
 # Check if xpk is installed in the venv
 if ! pip show xpk &> /dev/null; then
     echo "xpk not found in the virtual environment. Please install it by running:"
-    echo "pip install xpk==0.16.0"
+    echo "pip install xpk==0.16.1"
     exit 1
 fi
 # --- End Environment Setup ---
@@ -54,22 +54,28 @@ XLA_FLAGS=" \
   --xla_tpu_accumulate_into_mrb=true \
   --xla_tpu_mosaic_fusion=false \
   --xla_tpu_pcie_bandwidth_multiplier=0.03 \
+  --xla_tpu_enable_sparse_core_collective_offload_nd_reduce_scatter=true \
   --xla_tpu_enable_layer_scheduler_for_dependent_collectives=true \
   --xla_tpu_enable_sparse_core_collective_aggregator=true \
   --xla_tpu_enable_latency_hiding_layer_scheduler=true \
-  --xla_tpu_enable_multi_compute_overlap_in_layer_scheduler=true \
-  --xla_lhs_threshold_for_applying_output_fusion_latency_multiplier=1e10 \
-  --xla_lhs_output_fusion_latency_multiplier=1e-3 \
+  --xla_tpu_enable_multi_compute_overlap_in_layer_scheduler=false \
   --xla_tpu_enable_sparse_core_offload_queuing_in_lhs=true \
-  --xla_tpu_sparse_core_all_gather_latency_multiplier=1.3 \
   --xla_tpu_sparse_core_all_reduce_offload_min_size_in_bytes=204800 \
-  --xla_tpu_sparse_core_reduce_scatter_latency_multiplier=3 \
   --xla_max_concurrent_async_all_gathers=1 \
   --xla_tpu_scheduler_percent_shared_memory_limit=140 \
+  --xla_tpu_data_parallel_opt_different_sized_ops=true \
   --xla_tpu_enable_collective_pipeliner=true \
+  --xla_tpu_enable_ici_rs_pipelining=false \
   --xla_tpu_enable_tree_use_collective_pipeliner=true \
   --xla_latency_hiding_scheduler_rerun=0 \
-  --xla_tpu_host_transfer_overlap_limit=1 "
+  --xla_tpu_host_transfer_overlap_limit=1 \
+  --xla_tpu_ici_rs_pipelining_threshold_kib=1048576 \
+  --xla_tpu_impure_use_lmr_on_gxc=true \
+  --xla_tpu_dot_dot_fusion_duplicated=true \
+  --xla_tpu_rwb_fusion=false \
+  --xla_tpu_order_dot_after_layout=true \
+  --xla_tpu_prefetch_interval_picker_size_override=0 \
+  --xla_tpu_async_copy_bandwidth_scaling_factor=0.5 "
 
 # MaxText Workload Overrides
 MAXTEXT_ARGS="\
@@ -79,19 +85,18 @@ max_target_length=4096 \
 dcn_pipeline_parallelism=1 \
 dcn_data_parallelism=-1 \
 ici_pipeline_parallelism=1 \
-ici_fsdp_transpose_parallelism=1 \
+ici_fsdp_transpose_parallelism=2 \
 ici_fsdp_parallelism=-1 \
 allow_split_physical_axes=True \
 use_iota_embed=True \
 remat_policy=custom \
 decoder_layer_input=offload \
 opt_type=adamw \
-mu_dtype=bfloat16 \
-grad_dtype=bfloat16 \
 megablox=True \
 sparse_matmul=True \
 use_custom_sort_vjp=True \
-fsdp_shard_on_exp=False \
+fsdp_shard_on_exp=True \
+moe_fsdp_use_two_stage_all_gather=True \
 sa_use_fused_bwd_kernel=True \
 sa_block_q=2048 \
 sa_block_kv=2048 \
@@ -102,7 +107,8 @@ sa_block_kv_dq=2048 \
 sa_block_q_dq=2048 \
 attention=flash \
 use_tokamax_splash=True \
-use_max_logit_estimate=-1 \
+use_max_logit_estimate=22 \
+attn_logits_soft_cap=15 \
 cost_estimate_flops_fwd=5000000000000 \
 cost_estimate_flops_bwd=5000000000000 \
 float32_weight_sum=False \

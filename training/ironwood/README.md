@@ -4,10 +4,10 @@ The training recipes contained in this folder are optimized for Ironwood TPU. He
 
 | <div style="width:100px;">Model ID</div> | Number of chips | GBS | Sequence length | Precision | Step time (seconds) | TFLOPs/sec/chip | Tokens/sec/chip |
 |-----------------|--------------------|--------------|--------------------------|--------------------|-------------|--------------|-----------------------|
-| deepseek-v3     | 128                | 2048         | 4096                     | bf16               | 27.91       | 587.91       | 2,347.65              |
+| deepseek-v3     | 128                | 2048         | 4096                     | bf16               | 27.02       | 607.53       | 2,425.75              |
 | deepseek-v3     | 128                | 2048         | 4096                     | fp8_full           | 22.83       | 718.57       | 2,869.59              |
-| deepseek-v3     | 256                | 4096         | 4096                     | bf16               | 29.35       | 559.18       | 2,232.66              |
-| deepseek-v3     | 256                | 4096         | 4096                     | fp8_full           | 26.51       | 618.95       | 2,471.53              |
+| deepseek-v3     | 256                | 4096         | 4096                     | bf16               | 26.79       | 612.66       | 2,446.25              |
+| deepseek-v3     | 256                | 4096         | 4096                     | fp8_full           | 22.08       | 743.46       | 2,968.49              |
 | gpt-oss-120b    | 64                 | 1280         | 8192                     | bf16               | 17.10       | 330.25       | 9,581.66              |
 | gpt-oss-120b    | 256                | 5120         | 8192                     | bf16               | 17.12       | 329.90       | 9,571.36              |
 | llama3.1-405b   | 256                | 1536         | 8192                     | bf16               | 99.66       | 1,244.67     | 493.17                |
@@ -18,4 +18,4 @@ The training recipes contained in this folder are optimized for Ironwood TPU. He
 | llama3.1-70b    | 256                | 1024         | 8192                     | fp8_full           | 9.38        | 1,568.72     | 3,491.88              |
 | llama3.1-70b    | 256                | 64           | 131072                   | bf16               | 34.72       | 879.83       | 943.63                |
 | llama3.1-70b    | 256                | 64           | 131072                   | fp8_full           | 31.47       | 970.72       | 1,041.05              |
-| qwen3-235b-a22b | 256                | 8192         | 4096                     | bf16               | 33.81       | 574.87       | 3,876.01              |
+| qwen3-235b-a22b | 256                | 8192         | 4096                     | bf16               | 31.58       | 615.69       | 4,150.78              |
