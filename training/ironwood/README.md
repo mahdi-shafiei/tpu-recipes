@@ -4,10 +4,10 @@ The training recipes contained in this folder are optimized for Ironwood TPU. He
 
 | <div style="width:100px;">Model ID</div> | Number of chips | GBS | Sequence length | Precision | Step time (seconds) | TFLOPs/sec/chip | Tokens/sec/chip |
 |-----------------|--------------------|--------------|--------------------------|--------------------|-------------|--------------|-----------------------|
-| deepseek-v3     | 128                | 2048         | 4096                     | bf16               | 27.91       | 587.91       | 2,347.65              |
+| deepseek-v3     | 128                | 2048         | 4096                     | bf16               | 27.02       | 607.53       | 2,425.75              |
 | deepseek-v3     | 128                | 2048         | 4096                     | fp8_full           | 22.83       | 718.57       | 2,869.59              |
-| deepseek-v3     | 256                | 4096         | 4096                     | bf16               | 29.35       | 559.18       | 2,232.66              |
-| deepseek-v3     | 256                | 4096         | 4096                     | fp8_full           | 26.51       | 618.95       | 2,471.53              |
+| deepseek-v3     | 256                | 4096         | 4096                     | bf16               | 26.79       | 612.66       | 2,446.25              |
+| deepseek-v3     | 256                | 4096         | 4096                     | fp8_full           | 22.08       | 743.46       | 2,968.49              |
 | gpt-oss-120b    | 64                 | 1280         | 8192                     | bf16               | 17.77       | 317.63       | 9,216.61              |
 | gpt-oss-120b    | 256                | 5120         | 8192                     | bf16               | 18.77       | 300.64       | 8,724.20              |
 | llama3.1-405b   | 256                | 1536         | 8192                     | bf16               | 99.66       | 1,244.67     | 493.17                |
