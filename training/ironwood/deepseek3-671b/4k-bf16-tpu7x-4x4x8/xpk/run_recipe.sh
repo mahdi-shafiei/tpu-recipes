@@ -13,7 +13,7 @@ source "${UV_VENV_PATH}/bin/activate"
 # Check if xpk is installed in the venv
 if ! pip show xpk &> /dev/null; then
     echo "xpk not found in the virtual environment. Please install it by running:"
-    echo "pip install xpk==0.16.0"
+    echo "pip install xpk==0.16.1"
     exit 1
 fi
 # --- End Environment Setup ---
@@ -80,6 +80,7 @@ decoder_layer_input=offload \
 opt_type=adamw \
 mu_dtype=bfloat16 \
 grad_dtype=bfloat16 \
+use_random_routing=True \
 megablox=True \
 sparse_matmul=True \
 use_custom_sort_vjp=True \
@@ -98,9 +99,6 @@ use_max_logit_estimate=-1 \
 cost_estimate_flops_fwd=5000000000000 \
 cost_estimate_flops_bwd=5000000000000 \
 float32_weight_sum=False \
-tile_batch_seq=512 \
-tile_embed_dim=1024 \
-tile_mlp_dim=2048 \
 use_tokamax_gmm=True \
 tokenizer_path=assets/tokenizer.mistral-v3 \
 dataset_type=synthetic \

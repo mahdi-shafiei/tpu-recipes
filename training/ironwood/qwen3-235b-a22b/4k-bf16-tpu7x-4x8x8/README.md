@@ -5,7 +5,6 @@ This recipe outlines the steps for running a qwen3-235b-a22b
 [Ironwood GKE clusters](https://cloud.google.com/kubernetes-engine) by using
 [XPK](https://github.com/AI-Hypercomputer/xpk).
 
-
 ## Workload Details
 
 This workload is configured with the following details:
