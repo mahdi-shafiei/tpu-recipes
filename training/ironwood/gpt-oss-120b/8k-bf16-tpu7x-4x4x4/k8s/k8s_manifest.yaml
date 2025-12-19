@@ -23,6 +23,7 @@ spec:
           podFailurePolicy:
             rules:
             - action: FailJob
+              onPodConditions: []
               onExitCodes:
                 containerName: jax-tpu
                 operator: NotIn
