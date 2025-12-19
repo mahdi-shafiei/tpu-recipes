@@ -6,13 +6,14 @@ This recipe outlines the steps for running a llama3.1-70b
 by applying a Kubernetes manifest to deploy a JobSet resource.
 
 
+
 ## Workload Details
 
 This workload is configured with the following details:
 
--   Sequence Length: 8192
+-   Sequence Length: 131072
 -   Precision: bf16
--   Chips: 64 (4x4x4 topology)
+-   Chips: 256 (4x8x8 topology)
 
 ## Prerequisites
 
@@ -69,7 +70,7 @@ export BASE_OUTPUT_DIR=""    # e.g., "gs://your-bucket-name/my-base-output-dir"
 export WORKLOAD_IMAGE=""   # e.g., "gcr.io/my-project/my-maxtext-runner:latest"
 
 # Set workload name (or modify as needed, make sure its unique in the cluster)
-export WORKLOAD_NAME="$(printf "%.26s" "${USER//_/-}-llama3-1-70b-8192-4x4x4")-$(date +%Y%m%d-%H%M)"
+export WORKLOAD_NAME="$(printf "%.26s" "${USER//_/-}-llama3-1-70b-131072-4x8x8")-$(date +%Y%m%d-%H%M)"
 ```
 
 ### 2. Run llama3.1-70b Pretraining Workload
