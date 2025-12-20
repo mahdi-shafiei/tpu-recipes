@@ -1,0 +1,117 @@
+# Pretrain wan workload on Ironwood GKE clusters with Kubernetes JobSet
+
+This recipe outlines the steps for running a wan
+[MaxDiffusion](https://github.com/AI-Hypercomputer/maxdiffusion) pretraining
+workload on
+[Ironwood GKE clusters](https://cloud.google.com/kubernetes-engine)
+by applying a Kubernetes manifest to deploy a JobSet resource.
+
+## Prerequisites
+
+This recipe assumes the following prerequisites are met:
+
+-   **GKE Cluster:** A GKE cluster with
+    [JobSet](https://jobset.sigs.k8s.io/docs/installation/) installed and
+    running.
+-   **Container Image:** A pre-built container image (such as
+    `gcr.io/my-project/my-maxdiffusion-runner:latest`) containing the
+    MaxDiffusion workload, accessible by the GKE cluster.
+-   **Tools:** `gcloud`, `kubectl`, `gke-gcloud-auth-plugin`, and `envsubst`
+    installed on your workstation. If `envsubst` is missing, install it with
+    `sudo apt-get update && sudo apt-get install -y gettext-base`.
+-   **Permissions:** You have permissions to run `kubectl apply` on the target
+    cluster and the cluster has permissions to pull the container image.
+
+## Orchestration and deployment tools
+
+For this recipe, the following setup is used:
+
+-   **Orchestration** -
+    [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine)
+-   **Pretraining job configuration and deployment** - A Kubernetes manifest
+    (`k8s_manifest.yaml`) is used to define and deploy the
+    [Kubernetes Jobset](https://kubernetes.io/blog/2025/03/23/introducing-jobset)
+    resource, which manages the execution of the MaxDiffusion pretraining
+    workload.
+
+## Run the recipe
+
+This recipe uses a Kubernetes manifest (k8s_manifest.yaml) to deploy the
+workload. The following commands will set the required environment variables,
+substitute them into k8s_manifest.yaml, and apply the resulting configuration to
+your cluster.
+
+1.  Configure Environment Variables Open a terminal and set the following
+    environment variables to match your setup.
+
+**Note:**
+
+-   `k8s_manifest.yaml` is in the same directory as this README.
+- For `WORKLOAD_IMAGE` see [Docker container image](../xpk/README.md#docker-container-image) section.
+- For `DATASET_DIR` see [Docker container image](../xpk/README.md#training-dataset) section.
+
+```bash
+# Set variables for your environment
+export PROJECT_ID=""    # Your GCP project name
+export CLUSTER_NAME=""  # The name of your GKE cluster
+export ZONE=""          # The zone of your GKE cluster
+export BASE_OUTPUT_DIR=""    # e.g., "gs://your-bucket-name/my-base-output-dir"
+export WORKLOAD_IMAGE=""   # e.g., "gcr.io/my-project/my-maxdiffusion-runner:latest"
+export DATASET_DIR="" # e.g., "gs://<YOUR_BUCKET>/PusaV1_training" from the previous step
+
+# Set workload name (or modify as needed, make sure its unique in the cluster)
+export WORKLOAD_NAME="$(printf "%.26s" "${USER//_/-}-wan")-$(date +%Y%m%d-%H%M)"
+```
+
+1.  Run wan Pretraining Workload Once the environment variables are
+    set, run the following commands to fetch cluster credentials and deploy the
+    JobSet:
+
+```bash
+# Fetch cluster credentials
+gcloud container clusters get-credentials ${CLUSTER_NAME} --zone ${ZONE} --project ${PROJECT_ID}
+
+# Apply the manifest
+envsubst '${BASE_OUTPUT_DIR} ${WORKLOAD_NAME} ${WORKLOAD_IMAGE} ${DATASET_DIR}' < k8s_manifest.yaml | kubectl apply -n default -f -
+```
+
+## Monitor the job
+
+To monitor your job's progress, you can use kubectl to check the Jobset status
+and logs:
+
+You can also monitor your cluster and TPU usage through the Google Cloud
+Console:
+https://console.cloud.google.com/kubernetes/workload/overview?project={PROJECT_ID}
+
+```bash
+# Check JobSet status
+kubectl get jobset -n default ${WORKLOAD_NAME}
+
+# Get the name of the first pod in the JobSet
+POD_NAME=$(kubectl get pods -l jobset.sigs.k8s.io/jobset-name=${WORKLOAD_NAME} -n default -o jsonpath='{.items[0].metadata.name}')
+
+# Follow the logs of that pod
+kubectl logs -f -n default ${POD_NAME}
+```
+
+## Delete resources
+
+Delete a specific workload To delete the JobSet created by this recipe, run:
+
+```bash
+kubectl delete jobset ${WORKLOAD_NAME} -n default
+```
+
+## Check results
+
+After the job completes, you can check the results by:
+
+Accessing output logs from your job using kubectl logs. Checking any data stored
+in the Google Cloud Storage bucket specified by the ${BASE_OUTPUT_DIR} variable
+in your run_recipe.sh. Reviewing metrics in Cloud Monitoring, if configured.
+Next steps: deeper exploration and customization This recipe provides a starting
+point for running MaxDiffusion workloads. For advanced usage, including
+exploring different models, datasets, and training parameters, please refer to
+the
+[MaxDiffusion GitHub repository](https://github.com/AI-Hypercomputer/maxdiffusion)
