@@ -13,7 +13,7 @@ source "${UV_VENV_PATH}/bin/activate"
 # Check if xpk is installed in the venv
 if ! pip show xpk &> /dev/null; then
     echo "xpk not found in the virtual environment. Please install it by running:"
-    echo "pip install xpk==0.16.0"
+    echo "pip install xpk==0.16.1"
     exit 1
 fi
 # --- End Environment Setup ---
@@ -29,7 +29,7 @@ export CLUSTER_NAME=""
 export ZONE=""
 export BASE_OUTPUT_DIR=""
 export WORKLOAD_IMAGE=""
-export WORKLOAD_NAME="$(printf "%.26s" "${USER//_/-}-llama3-1-405b-8192-4x4x4")-$(date +%Y%m%d-%H%M)"
+export WORKLOAD_NAME="$(printf "%.26s" "${USER//_/-}-llama3-1-405b-8192-4x8x8")-$(date +%Y%m%d-%H%M)"
 
 # XLA Flags
 XLA_FLAGS=" \
@@ -66,7 +66,7 @@ dataset_type=synthetic \
 opt_type=adamw \
 mu_dtype=bfloat16 \
 use_tokamax_splash=True \
-use_max_logit_estimate=30 \
+use_max_logit_estimate=-1 \
 sa_block_kv=2048 \
 sa_block_kv_compute=256 \
 sa_block_q=1024 \
@@ -82,7 +82,8 @@ max_target_length=8192 \
 profiler=xplane \
 steps=30 \
 base_output_directory=${BASE_OUTPUT_DIR} \
-run_name=${WORKLOAD_NAME}"
+run_name=${WORKLOAD_NAME} \
+output_dir=${BASE_OUTPUT_DIR}"
 
 xpk workload create \
   --cluster=$CLUSTER_NAME \
