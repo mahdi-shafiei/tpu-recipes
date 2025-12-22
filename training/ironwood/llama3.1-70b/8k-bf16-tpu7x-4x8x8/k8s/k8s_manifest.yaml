@@ -17,8 +17,8 @@ spec:
       replicas: 1
       template:
         spec:
-          parallelism: 16    # Equal to the number of VMs per slice (or sub-slice).
-          completions: 16    # Same as the above.
+          parallelism: 64    # Equal to the number of VMs per slice (or sub-slice).
+          completions: 64    # Same as the above.
           backoffLimit: 0   # When any pod fails, the job is failed
           podFailurePolicy:
             rules:
@@ -33,7 +33,7 @@ spec:
               restartPolicy: Never
               nodeSelector:
                 cloud.google.com/gke-tpu-accelerator: tpu7x
-                cloud.google.com/gke-tpu-topology: 4x4x4
+                cloud.google.com/gke-tpu-topology: 4x8x8
               hostNetwork: true
               dnsPolicy: ClusterFirstWithHostNet
               containers:
