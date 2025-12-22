@@ -117,8 +117,7 @@ wo_tile_drhs_mlp_dim=4096 \
 dataset_type=synthetic \
 dataset_path=gs://max-datasets-rogue \
 base_output_directory=${BASE_OUTPUT_DIR} \
-run_name=${WORKLOAD_NAME} \
-output_dir=${BASE_OUTPUT_DIR}"
+run_name=${WORKLOAD_NAME} "
 
 xpk workload create \
   --cluster=$CLUSTER_NAME \

@@ -103,7 +103,6 @@ sudo usermod -aG docker $USER ## relaunch the terminal and make sure you have th
 docker run hello-world # Test docker
 ```
 
-
 ## Orchestration and deployment tools
 
 For this recipe, the following setup is used:
@@ -113,12 +112,9 @@ For this recipe, the following setup is used:
 -   **Pretraining job configuration and deployment** - XPK is used to configure
     and deploy the
     [Kubernetes Jobset](https://kubernetes.io/blog/2025/03/23/introducing-jobset)
-    resource, which manages the execution of the qwen3-235b workload.
-
+    resource, which manages the execution of the qwen3-235b-a22b workload.
 
 ## Test environment
-
-
 
 This recipe is optimized for and tested with tpu7x-4x8x8.
 
@@ -143,11 +139,12 @@ across all commands and configurations.
     `"gs://<your_gcs_bucket>"`).
 -   `WORKLOAD_IMAGE`: The Docker image for the workload. This is set in
     `run_recipe.sh` to
-    `${CONTAINER_REGISTRY}/${PROJECT_ID}/${USER}-qwen3-235b-runner` by
+    `${CONTAINER_REGISTRY}/${PROJECT_ID}/${USER}-qwen3-235b-a22b-runner` by
     default, matching the image built in the
     [Docker container image](#docker-container-image) section.
 -   `WORKLOAD_NAME`: A unique name for your workload. This is set in
-    `run_recipe.sh` to `${USER}-qwen3-235b-$(date +%H%M)` by default.
+    `run_recipe.sh` using the following command:
+    `export WORKLOAD_NAME="$(printf "%.26s" "${USER//_/-}-qwen3-235b-a22b-4096-fsdp-4x8x8")-$(date +%Y%m%d-%H%M)"`
 -   `GKE_VERSION`: The GKE version, `1.34.0-gke.2201000` or later.
 -   `ACCELERATOR_TYPE`: The TPU type (e.g., `tpu7x-4x4x4`). See topologies
     [here](https://cloud.google.com/kubernetes-engine/docs/concepts/plan-tpus#configuration).
@@ -174,7 +171,6 @@ xpk cluster create \
   --reservation=${RESERVATION_NAME}
 ```
 
-
 ## Docker container image
 
 To build your own image, follow the steps linked in this section. If you don't
@@ -183,21 +179,11 @@ XPK and its dependencies. Docker installation is part of this process.
 
 ### Steps for building workload image
 
-**Warning:** If any of the software versions below show as "N/A", you *must*
-fill in the correct versions. To find the missing versions (e.g., for MaxText
-commit hash, Libtpu, and Jax/Jaxlib), you may need to:
-1.  Pull the Docker image from the workload that this recipe is based on.
-2.  Start the Docker container.
-3.  Run commands within the container to get the specific versions. For example,
-to find the MaxText commit, you can use `git rev-parse HEAD` inside the cloned
-MaxText repository within the container. For Python package versions, use
-`pip show <package_name>`.
-
 The following software versions are used:
 
--   Libtpu version: N/A
--   Jax version: N/A
--   Maxtext version: N/A
+-   Libtpu version: 0.0.33.dev20251219+nightly
+-   Jax version: 0.8.3.dev20251219
+-   Maxtext version: maxtext-tutorial-v1.4.0
 -   Python: 3.11
 -   XPK: 0.16.1
 
@@ -214,17 +200,17 @@ source ${HOME}/.local/bin/venv-docker/bin/activate
 pip install --upgrade pip
 
 # Make sure you're running on a Virtual Environment with python 3.12
-if [[ "$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")' 2>/dev/null)" == "3.12" ]]; then { echo "You have the correct Python version 3.12"; } else { >&2 echo "Error: Python version must be 3.12."; false; } fi
+if [[ "$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")' 2>/dev/null)" == "3.12" ]]; then { echo "You have the correct Python version 3.12"; } else { >&2 echo "Error: Python version must be 3.12"; false;} fi
 
 # Clone MaxText Repository and Checkout Recipe Branch
 git clone https://github.com/AI-Hypercomputer/maxtext.git
 cd maxtext
-git checkout N/A
+git checkout maxtext-tutorial-v1.4.0
 
 # Custom Jax and LibTPU wheels
-pip download libtpu==N/A -f"https://storage.googleapis.com/jax-releases/libtpu_releases.html"
+pip download libtpu==0.0.33.dev20251219+nightly -f"https://storage.googleapis.com/jax-releases/libtpu_releases.html"
 
-pip download --pre jax==N/A jaxlib==N/A --index https://us-python.pkg.dev/ml-oss-artifacts-published/jax/simple/
+pip download --pre jax==0.8.3.dev20251219 jaxlib==0.8.3.dev20251219 --index https://us-python.pkg.dev/ml-oss-artifacts-published/jax/simple/
 
 # Build and upload the docker image
 bash dependencies/scripts/docker_build_dependency_image.sh MODE=custom_wheels
@@ -256,10 +242,10 @@ does this for you already):
 gcloud container clusters get-credentials ${CLUSTER_NAME} --project ${PROJECT_ID} --zone ${ZONE}
 ```
 
-### Run qwen3-235b Pretraining Workload
+### Run qwen3-235b-a22b Pretraining Workload
 
 The `run_recipe.sh` script contains all the necessary environment variables and
-configurations to launch the qwen3-235b pretraining workload.
+configurations to launch the qwen3-235b-a22b pretraining workload.
 
 To run the benchmark, first make the script executable and then run it:
 
@@ -320,7 +306,6 @@ For more in-depth debugging, use xpk inspector: (`xpk inspector`)
 xpk inspector --cluster ${CLUSTER_NAME} --project ${PROJECT_ID} --zone ${ZONE} [--workload ${WORKLOAD_NAME}]
 ```
 
-
 ### Delete resources
 
 #### Delete a specific workload
@@ -337,7 +322,6 @@ xpk workload delete --cluster ${CLUSTER_NAME} --project ${PROJECT_ID} --zone ${Z
 xpk cluster delete --cluster ${CLUSTER_NAME} --zone ${ZONE} --project ${PROJECT_ID}
 ```
 
-
 ## Check results
 
 After the job completes, you can check the results by:
@@ -346,7 +330,6 @@ After the job completes, you can check the results by:
 -   Checking any data stored in the Google Cloud Storage bucket specified by the
     `${BASE_OUTPUT_DIR}` variable in your `run_recipe.sh`.
 -   Reviewing metrics in Cloud Monitoring, if configured.
-
 
 ## Next steps: deeper exploration and customization
 
