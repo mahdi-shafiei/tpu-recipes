@@ -1,16 +1,17 @@
-# Pretrain llama3.1-405b workload on Ironwood GKE clusters with XPK
+# Pretrain qwen3-235b-a22b workload on Ironwood GKE clusters with XPK
 
-This recipe outlines the steps for running a llama3.1-405b
+This recipe outlines the steps for running a qwen3-235b-a22b
 [MaxText](https://github.com/AI-Hypercomputer/maxtext) pretraining workload on
 [Ironwood GKE clusters](https://cloud.google.com/kubernetes-engine) by using
 [XPK](https://github.com/AI-Hypercomputer/xpk).
+
 
 ## Workload Details
 
 This workload is configured with the following details:
 
--   Sequence Length: 8192
--   Precision: bf16
+-   Sequence Length: 4096
+-   Precision: fp8
 -   Chips: 256 (4x8x8 topology)
 
 ## Prerequisites
@@ -41,6 +42,7 @@ To run this recipe, you need the following:
 -   **XPK and Dependencies:** Follow the steps in the
     [Install XPK and dependencies](#install-xpk-and-dependencies) section to
     install XPK, `kubectl`, `kubectl-kueue`, and `kubectl-kjob`.
+
 
 ## Install XPK and dependencies
 
@@ -110,7 +112,7 @@ For this recipe, the following setup is used:
 -   **Pretraining job configuration and deployment** - XPK is used to configure
     and deploy the
     [Kubernetes Jobset](https://kubernetes.io/blog/2025/03/23/introducing-jobset)
-    resource, which manages the execution of the llama3.1-405b workload.
+    resource, which manages the execution of the qwen3-235b-a22b workload.
 
 ## Test environment
 
@@ -137,14 +139,14 @@ across all commands and configurations.
     `"gs://<your_gcs_bucket>"`).
 -   `WORKLOAD_IMAGE`: The Docker image for the workload. This is set in
     `run_recipe.sh` to
-    `${CONTAINER_REGISTRY}/${PROJECT_ID}/${USER}-llama3-1-405b-runner` by
+    `${CONTAINER_REGISTRY}/${PROJECT_ID}/${USER}-qwen3-235b-a22b-runner` by
     default, matching the image built in the
     [Docker container image](#docker-container-image) section.
 -   `WORKLOAD_NAME`: A unique name for your workload. This is set in
     `run_recipe.sh` using the following command:
-    `export WORKLOAD_NAME="$(printf "%.26s" "${USER//_/-}-llama3-1-405b-8192-4x8x8")-$(date +%Y%m%d-%H%M)"`
+    `export WORKLOAD_NAME="$(printf "%.26s" "${USER//_/-}-qwen3-235b-a22b-4096-fsdp-4x8x8")-$(date +%Y%m%d-%H%M)"`
 -   `GKE_VERSION`: The GKE version, `1.34.0-gke.2201000` or later.
--   `ACCELERATOR_TYPE`: The TPU type (e.g., `tpu7x-4x8x8`). See topologies
+-   `ACCELERATOR_TYPE`: The TPU type (e.g., `tpu7x-4x4x4`). See topologies
     [here](https://cloud.google.com/kubernetes-engine/docs/concepts/plan-tpus#configuration).
 -   `RESERVATION_NAME`: Your TPU reservation name. Use the reservation name if
     within the same project. For a shared project, use
@@ -179,8 +181,8 @@ XPK and its dependencies. Docker installation is part of this process.
 
 The following software versions are used:
 
--   Libtpu version: 0.0.33.dev20251218+nightly
--   Jax version: 0.8.2
+-   Libtpu version: 0.0.33.dev20251219+nightly
+-   Jax version: 0.8.3.dev20251219
 -   Maxtext version: maxtext-tutorial-v1.4.0
 -   Python: 3.11
 -   XPK: 0.16.1
@@ -206,9 +208,9 @@ cd maxtext
 git checkout maxtext-tutorial-v1.4.0
 
 # Custom Jax and LibTPU wheels
-pip download libtpu==0.0.33.dev20251218+nightly -f"https://storage.googleapis.com/jax-releases/libtpu_releases.html"
+pip download libtpu==0.0.33.dev20251219+nightly -f"https://storage.googleapis.com/jax-releases/libtpu_releases.html"
 
-pip download --pre jax==0.8.2 jaxlib==0.8.2 --index https://us-python.pkg.dev/ml-oss-artifacts-published/jax/simple/
+pip download --pre jax==0.8.3.dev20251219 jaxlib==0.8.3.dev20251219 --index https://us-python.pkg.dev/ml-oss-artifacts-published/jax/simple/
 
 # Build and upload the docker image
 bash dependencies/scripts/docker_build_dependency_image.sh MODE=custom_wheels
@@ -240,10 +242,10 @@ does this for you already):
 gcloud container clusters get-credentials ${CLUSTER_NAME} --project ${PROJECT_ID} --zone ${ZONE}
 ```
 
-### Run llama3.1-405b Pretraining Workload
+### Run qwen3-235b-a22b Pretraining Workload
 
 The `run_recipe.sh` script contains all the necessary environment variables and
-configurations to launch the llama3.1-405b pretraining workload.
+configurations to launch the qwen3-235b-a22b pretraining workload.
 
 To run the benchmark, first make the script executable and then run it:
 
