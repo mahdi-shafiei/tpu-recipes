@@ -19,7 +19,7 @@ spec:
         spec:
           parallelism: 64    # Equal to the number of VMs per slice (or sub-slice).
           completions: 64    # Same as the above.
-          backoffLimit: 0   # When any pod fails, the job is failed.
+          backoffLimit: 0   # When any pod fails, the job is failed
           podFailurePolicy:
             rules:
             - action: FailJob
