@@ -191,7 +191,7 @@ create a node pool with a single TPU v7 node in 2x2x1 configuration.
         - ReadWriteOnce
       resources:
         requests:
-          storage: 500Gi
+          storage: 1000Gi
     ---
     apiVersion: apps/v1
     kind: Deployment
@@ -212,7 +212,7 @@ create a node pool with a single TPU v7 node in 2x2x1 configuration.
             cloud.google.com/gke-tpu-topology: 2x2x1
           containers:
           - name: vllm-tpu
-            image: vllm/vllm-tpu:latest
+            image: vllm/vllm-tpu:v0.13.2-ironwood
             command: ["python3", "-m", "vllm.entrypoints.openai.api_server"]
             args:
             - --host=0.0.0.0
@@ -475,7 +475,7 @@ post:[Scaling high-performance inference cost-effectively](https://cloud.google.
       terminationGracePeriodSeconds: 60
       containers:
       - name: vllm-bench
-        image: vllm/vllm-tpu:latest
+        image: vllm/vllm-tpu:v0.13.2-ironwood
         command: ["vllm"]
         args:
         - bench
