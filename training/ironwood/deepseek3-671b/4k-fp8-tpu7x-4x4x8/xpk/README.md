@@ -273,6 +273,28 @@ You can customize the run by modifying `run_recipe.sh`:
 Note that any MaxText configurations not explicitly overridden in `MAXTEXT_ARGS`
 are expected to use the defaults within the specified `WORKLOAD_IMAGE`.
 
+## DeepSeek V3 FP8 Recipe
+To optimize the performance of DeepSeek V3, we developed a custom recipe optimized for FP8 throughput. The method applies to specific compute-intensive and bandwidth-heavy components while preserving training stability through a fine-grained scaling strategy.
+
+### Quantization Scope
+To realize these gains, the recipe employs a w8a8g8 (8-bit weights, activations and gradients) strategy targeting three primary areas:
+
+* Megablox Kernels: Specifically the `gmm` and `tgmm` operations.
+
+* Attention Projections: Utilizing convolution fusion,which involves combining a convolution operation with one or more subsequent operations.
+
+* Communication: Specifically the weight All-Gathers.
+
+### FP8 Recipe
+* Rounding: rounding to nearest even
+* Precision
+  * Activations and weights: e4m3fn
+  * Gradients:e5m2
+* Scaling granularity: per-axis
+* Scaling mode:
+  * static for weights and activations
+  * dynamic for gradients
+
 ## Monitor the job
 
 To monitor your job's progress, you can use kubectl to check the Jobset status
